@@ -1,17 +1,282 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Discord Bot API Controle</title>
-    <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Freddo Community</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        color: #333;
+    }
+    header {
+        background-color: #007BFF;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 2em;
+    }
+    nav {
+        margin-top: 10px;
+    }
+    nav a {
+        color: #fff;
+        margin: 0 15px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1em;
+    }
+    nav a:hover {
+        text-decoration: underline;
+        color: #ffdd57;
+    }
+    main {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+    }
+    section {
+        background-color: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+        color: #007BFF;
+        margin-top: 0;
+    }
+    ul {
+        list-style: disc inside;
+    }
+    footer {
+        background-color: #333;
+        color: #eee;
+        text-align: center;
+        padding: 15px;
+        margin-top: 40px;
+    }
+    .btn {
+        display: inline-block;
+        background-color: #007BFF;
+        color: #fff;
+        padding: 10px 20px;
+        margin-top: 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+    }
+    /* Kalender stijl */
+    .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+    }
+    .day {
+        background-color: #e9ecef;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+    }
+    /* Social media icons (via emojis) */
+    .social-icons a {
+        margin: 0 10px;
+        font-size: 1.5em;
+        color: #007BFF;
+        text-decoration: none;
+    }
+    .social-icons a:hover {
+        color: #0056b3;
+    }
+    /* Form styling */
+    form {
+        display: flex;
+        flex-direction: column;
+        max-width: 400px;
+    }
+    label {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    input, textarea {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-family: 'Roboto', sans-serif;
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Controleer je Discord Bot</h1>
-        <button id="statusButton">Bot Status Check</button>
-        <p id="response"></p>
-    </div>
-    <script src="script.js"></script>
+<header>
+    <h1>Freddo Community</h1>
+    <nav>
+        <a href="#over">Over</a>
+        <a href="#activiteiten">Activiteiten</a>
+        <a href="#kalender">Kalender</a>
+        <a href="#forum">Forum</a>
+        <a href="#contact">Contact</a>
+        <a href="#contact-formulier">Formulier</a>
+        <a href="#galerij">Galerij</a>
+    </nav>
+</header>
+
+<main>
+    <!-- Over sectie -->
+    <section id="over">
+        <h2>Over Freddo Community</h2>
+        <p>Welkom bij de Freddo Community! Een plek voor fans, deelnemers en geïnteresseerden om samen te komen, ideeën te delen en activiteiten te organiseren. We organiseren regelmatig evenementen en bieden een platform voor community discussies.</p>
+    </section>
+
+    <!-- Activiteiten -->
+    <section id="activiteiten">
+        <h2>Activiteiten</h2>
+        <ul>
+            <li>Workshops en trainingen</li>
+            <li>Community bijeenkomsten</li>
+            <li>Online discussies</li>
+            <li>Speciale evenementen en meetups</li>
+        </ul>
+        <a class="btn" href="#contact">Meedoen? Neem contact op!</a>
+    </section>
+
+    <!-- Kalender -->
+    <section id="kalender">
+        <h2>Komende Evenementen</h2>
+        <div class="calendar" id="kalender-grid"></div>
+        <p>Blijf op de hoogte voor meer evenementen!</p>
+    </section>
+
+    <!-- Forum -->
+    <section id="forum">
+        <h2>Community Forum</h2>
+        <p>Hier kunnen leden ideeën delen en vragen stellen.</p>
+        <ul>
+            <li><a href="#">Vraag 1: Hoe doe ik...? </a></li>
+            <li><a href="#">Idee voor een nieuw evenement</a></li>
+            <li><a href="#">Algemene discussies</a></li>
+        </ul>
+        <a class="btn" href="#contact">Word lid of stel je vraag!</a>
+    </section>
+
+    <!-- Galerij -->
+    <section id="galerij">
+        <h2>Foto Galerij</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            <img src="https://via.placeholder.com/200x150?text=Foto+1" alt="Foto 1" style="width:200px; border-radius:5px;">
+            <img src="https://via.placeholder.com/200x150?text=Foto+2" alt="Foto 2" style="width:200px; border-radius:5px;">
+            <img src="https://via.placeholder.com/200x150?text=Foto+3" alt="Foto 3" style="width:200px; border-radius:5px;">
+        </div>
+    </section>
+
+    <!-- Contact formulier -->
+    <section id="contact-formulier">
+        <h2>Neem contact op</h2>
+        <form id="contactForm">
+            <label for="naam">Naam:</label>
+            <input type="text" id="naam" name="naam" required />
+
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required />
+
+            <label for="bericht">Bericht:</label>
+            <textarea id="bericht" name="bericht" rows="4" required></textarea>
+
+            <button type="submit" class="btn">Verstuur</button>
+        </form>
+        <p id="status"></p>
+    </section>
+
+    <!-- Footer social media -->
+    <section id="contact">
+        <h2>Social Media & Contact</h2>
+        <p>Heb je vragen of wil je meedoen? Stuur ons een e-mail of volg ons op social media:</p>
+        <p>Email: <a href="mailto:fredwardbarry@gmail.com">fredwardbarry@gmail.com</a></p>
+        <div class="social-icons">
+            <a href="#" title="Facebook" target="_blank">🌐</a>
+            <a href="#" title="Twitter" target="_blank">🐦</a>
+            <a href="#" title="Instagram" target="_blank">📸</a>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Freddo Community. Alle rechten voorbehouden.</p>
+</footer>
+
+<!-- Javascript voor kalender en contactformulier -->
+<script>
+    // Dynamische kalender
+    const kalenderGrid = document.getElementById('kalender-grid');
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Lege vakjes voor de eerste week
+    for(let i=0; i<firstDay; i++) {
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'day';
+        emptyDiv.style.visibility = 'hidden';
+        kalenderGrid.appendChild(emptyDiv);
+    }
+
+    // Dagen toevoegen
+    for(let d=1; d<=daysInMonth; d++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'day';
+        dayDiv.innerText = d;
+        kalenderGrid.appendChild(dayDiv);
+    }
+
+    // Contactformulier versturen naar Discord webhook
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const naam = document.getElementById('naam').value;
+        const email = document.getElementById('email').value;
+        const bericht = document.getElementById('bericht').value;
+        const statusEl = document.getElementById('status');
+
+        const payload = {
+            content: `Nieuw bericht van ${naam}\nE-mail: ${email}\nBericht: ${bericht}`
+        };
+
+        fetch('https://discord.com/api/webhooks/1483599467880911010/DNUCXQBOqMU1kP_nASvMp41wDR7A6QEl8dX3sdPdTmyTp0GyKaOXBywaLVOYSwoLXGPH', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }).then(response => {
+            if(response.ok) {
+                statusEl.innerText = 'Bericht verstuurd! Bedankt.';
+                document.getElementById('contactForm').reset();
+            } else {
+                statusEl.innerText = 'Fout bij versturen. Probeer het opnieuw.';
+            }
+        }).catch(error => {
+            statusEl.innerText = 'Er ging iets mis: ' + error;
+        });
+    });
+</script>
 </body>
 </html>
