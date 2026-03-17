@@ -3,194 +3,143 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>host2play.gratis - beveiligde toegang</title>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<title>host2play.gratis - Localhost Test</title>
+<!-- Styles voor layout -->
 <style>
-  body { margin:0; padding:0; font-family: Arial, sans-serif; }
-  #mainContent { display: none; }
-  #loginPage { display: flex; height: 100vh; align-items: center; justify-content: center; background-color: #f8f9fa; }
+  body { margin:0; padding:0; font-family: Arial, sans-serif; background-color: #222; }
+  #loginPage, #mainContent { width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center; }
+  #loginPage { background-color: #f8f9fa; flex-direction: column; }
+  #mainContent { display: none; flex-direction: column; }
+  .card { background: #fff; padding: 20px; border-radius: 8px; max-width: 400px; width: 100%; }
+  .btn { padding: 10px 20px; margin-top: 10px; border: none; border-radius: 4px; cursor: pointer; }
+  .btn-primary { background-color: #007bff; color: #fff; }
+  .btn-secondary { background-color: #6c757d; color: #fff; }
+  nav { width: 100%; background-color: #000; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+  nav a { color: #fff; margin: 0 10px; text-decoration: none; }
+  #logoutBtn { min-width: 160px; border-radius: 23px; }
 </style>
 </head>
 <body>
 
-<!-- Inloggen pagina -->
+<!-- Login pagina -->
 <div id="loginPage">
-  <div class="card p-4" style="max-width: 400px; width: 100%;">
-    <h3 class="text-center mb-3">Inloggen</h3>
+  <div class="card">
+    <h3 style="text-align:center;">Inloggen</h3>
     <form id="loginForm">
-      <div class="mb-3">
-        <label for="username" class="form-label">Gebruikersnaam</label>
-        <input type="text" class="form-control" id="username" required />
+      <div>
+        <label>Gebruikersnaam</label>
+        <input type="text" id="username" required />
       </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Wachtwoord</label>
-        <input type="password" class="form-control" id="password" required />
+      <div>
+        <label>Wachtwoord</label>
+        <input type="password" id="password" required />
       </div>
-      <button type="submit" class="btn btn-primary w-100">Inloggen</button>
+      <button class="btn btn-primary" type="submit">Inloggen</button>
     </form>
+    <button class="btn btn-secondary" id="resetPasswordBtn">Wachtwoord vergeten?</button>
   </div>
 </div>
 
-<!-- Hoofdinhoud, zichtbaar na inloggen -->
-<div id="mainContent" style="display:none;">
-<!-- Navigatiebalk -->
-<nav class="navbar navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">
-      <img src="https://host2play.pl/public/img/whitetxt.png" alt="host2play" height="45" />
-    </a>
+<!-- Hoofd inhoud, standaard verborgen -->
+<div id="mainContent">
+  <!-- Navigatiebalk -->
+  <nav>
     <div>
-      <a href="#offer" class="nav-link d-inline text-white">Home</a>
-      <a href="#contact" class="nav-link d-inline text-white">Contact</a>
-      <a href="#register" class="nav-link d-inline text-white">Register</a>
-      <a href="/about" class="nav-link d-inline text-white">About Us</a>
-      <a href="/rules" class="nav-link d-inline text-white">Rules</a>
-      <a href="/faq" class="nav-link d-inline text-white">FAQ</a>
-      <a href="https://host2play.com/discord" class="nav-link d-inline text-white">
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-discord" viewBox="0 0 16 16">
-          <path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 0 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/>
-        </svg>
-      </a>
-      <a href="/panel" class="btn btn-warning btn-sm" style="min-width:160px; border-radius:23px;">Control Panel <i class="bi bi-lock-fill"></i></a>
+      <img src="https://host2play.pl/public/img/whitetxt.png" alt="host2play" height="45" />
     </div>
-  </div>
-</nav>
+    <div style="display:flex; align-items:center;">
+      <a href="#offer">Home</a>
+      <a href="#contact">Contact</a>
+      <a href="#about">About Us</a>
+      <a href="#rules">Rules</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://host2play.com/discord" target="_blank" style="color:#fff;">Discord</a>
+      <button id="logoutBtn" class="btn btn-primary" style="margin-left:10px;">Uitloggen</button>
+    </div>
+  </nav>
 
-<!-- Header -->
-<header class="text-center text-white d-flex align-items-center justify-content-center" style="background: rgba(0, 0, 0, 0.65) url('/public/img/lp2.jpg') no-repeat center center; background-size: cover; height: 400px;">
-  <div>
+  <!-- Header -->
+  <header style="background: rgba(0,0,0,0.65) url('https://host2play.pl/public/img/lp2.jpg') no-repeat center; background-size:cover; height:400px; display:flex; align-items:center; justify-content:center; color:#fff; flex-direction:column;">
     <h1>Forge Your Digital World, Free Server Hosting for All</h1>
-    <a href="#offer" class="btn btn-primary btn-lg mt-3">Check offer</a>
-  </div>
-</header>
+    <a href="#offer" class="btn btn-primary" style="margin-top:20px;">Check offer</a>
+  </header>
 
-<!-- Free servers offer -->
-<section id="offer" class="py-5 bg-dark text-center text-white">
-  <h2 class="mb-4">Free servers offer</h2>
-  <div class="d-flex flex-wrap justify-content-center gap-4">
-    <!-- Minecraft -->
-    <div class="card bg-secondary text-white" style="width: 18rem;">
-      <img src="/public/img/steve.png" class="card-img-top mx-auto d-block" style="width: 100px; padding-top: 15px;" alt="Minecraft" />
-      <div class="card-body">
-        <h5 class="card-title"><a href="/offer/minecraft" class="text-white" style="text-decoration: none;">Minecraft</a></h5>
-        <p class="card-text">Play with your friends on a server with no cost</p>
-      </div>
-    </div>
-    <!-- Discord Bot -->
-    <div class="card bg-secondary text-white" style="width: 18rem;">
-      <img src="/public/img/discord.png" class="card-img-top mx-auto d-block" style="width: 100px; padding-top: 15px;" alt="Discord Bot" />
-      <div class="card-body">
-        <h5 class="card-title"><a href="/offer/bot" class="text-white" style="text-decoration: none;">Discord Bot</a></h5>
-        <p class="card-text">Host your bot for free with host2play</p>
-      </div>
-    </div>
-    <!-- FiveM -->
-    <div class="card bg-secondary text-white" style="width: 18rem;">
-      <img src="/public/img/fivem.png" class="card-img-top mx-auto d-block" style="width: 100px; padding-top: 15px;" alt="FiveM" />
-      <div class="card-body">
-        <h5 class="card-title"><a href="/offer/fivem" class="text-white" style="text-decoration: none;">FiveM</a></h5>
-        <p class="card-text">Create your customized GTA V multiplayer server for free</p>
-      </div>
-    </div>
-  </div>
-  <div class="mt-4">
-    <a href="/panel" class="btn btn-primary btn-lg">Claim your free server now!</a>
-  </div>
-</section>
+  <!-- Content -->
+  <section id="offer" style="padding:20px; background:#333; color:#fff;">
+    <h2>Free servers offer</h2>
+    <p>Hier komt de inhoud over het aanbod.</p>
+  </section>
 
-<!-- Advantages -->
-<section class="py-5 bg-dark text-center text-white">
-  <h2 class="mb-4">Our advantages</h2>
-  <div class="d-flex flex-wrap justify-content-center gap-4">
-    <div style="width: 250px;">
-      <h4>Completely free</h4>
-      <p>Play with your friends for free, without any limitations.</p>
-    </div>
-    <div style="width: 250px;">
-      <h4>Lots of resources</h4>
-      <p>Get up to 3GB of RAM and 3 cores per server!</p>
-    </div>
-    <div style="width: 250px;">
-      <h4>Easy to Use</h4>
-      <p>Ready to use with your own plugins/mods, or custom server engine file!</p>
-    </div>
-  </div>
-</section>
-
-<!-- Contact Form -->
-<section id="contact" class="py-5 bg-light text-dark">
-  <h2 class="text-center mb-4">Contact Us</h2>
-  <div class="container">
-    <form id="contactForm" class="mx-auto" style="max-width: 600px;">
-      <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" id="name" required />
+  <section id="contact" style="padding:20px; background:#eee; color:#000;">
+    <h2>Contact Us</h2>
+    <form id="contactForm">
+      <div>
+        <label>Naam</label>
+        <input type="text" id="name" required />
       </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" required />
+      <div>
+        <label>Email</label>
+        <input type="email" id="email" required />
       </div>
-      <div class="mb-3">
-        <label for="message" class="form-label">Message</label>
-        <textarea class="form-control" id="message" rows="4" required></textarea>
+      <div>
+        <label>Bericht</label>
+        <textarea id="message" rows="4" required></textarea>
       </div>
-      <button type="submit" class="btn btn-primary">Send Message</button>
+      <button type="submit" class="btn btn-primary">Verstuur</button>
     </form>
-  </div>
-</section>
+  </section>
 
-<!-- Register Form -->
-<section id="register" class="py-5 bg-dark text-white">
-  <h2 class="text-center mb-4">Register for Updates</h2>
-  <div class="container">
-    <form id="registerForm" class="mx-auto" style="max-width: 600px;">
-      <div class="mb-3">
-        <label for="regName" class="form-label">Name</label>
-        <input type="text" class="form-control" id="regName" required />
-      </div>
-      <div class="mb-3">
-        <label for="regEmail" class="form-label">Email</label>
-        <input type="email" class="form-control" id="regEmail" required />
-      </div>
-      <button type="submit" class="btn btn-warning">Register</button>
-    </form>
-  </div>
-</section>
+  <!-- Footer -->
+  <footer style="background:#000; color:#999; padding:20px; text-align:center;">
+    <p>&copy; 2024 host2play - All rights reserved</p>
+    <p>Email: <a href="mailto:info@host2play.gratis" style="color:#0e4688;">info@host2play.gratis</a></p>
+  </footer>
+</div>
 
-<!-- Footer -->
-<footer class="text-center py-4 bg-dark text-muted">
-  <p>&copy; 2024 host2play - All rights reserved</p>
-  <p>Email: <a href="mailto:info@host2play.gratis" class="text-info">info@host2play.gratis</a></p>
-</footer>
-
-<!-- JavaScript voor inloggen en formulieren -->
+<!-- Scripts -->
 <script>
-  // Beveiligde toegang
-  const correctUser = "admin"; // pas aan
-  const correctPass = "password"; // pas aan
+  // Check of ingelogd
+  if (localStorage.getItem('loggedIn') === 'true') {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+  } else {
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('mainContent').style.display = 'none';
+  }
 
+  // Inloggen
   document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const user = document.getElementById('username').value;
     const pass = document.getElementById('password').value;
-    if(user === correctUser && pass === correctPass) {
+    // Voor demo: vaste gebruikersnaam + wachtwoord
+    if (user === 'admin' && pass === 'password') {
+      localStorage.setItem('loggedIn', 'true');
       document.getElementById('loginPage').style.display = 'none';
       document.getElementById('mainContent').style.display = 'block';
     } else {
-      alert('Onjuiste gebruikersnaam of wachtwoord');
+      alert('Onjuiste inloggegevens');
     }
   });
 
-  // Formulieren
+  // Uitloggen
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    if (confirm('Wil je echt uitloggen?')) {
+      localStorage.removeItem('loggedIn');
+      document.getElementById('loginPage').style.display = 'flex';
+      document.getElementById('mainContent').style.display = 'none';
+    }
+  });
+
+  // Wachtwoord vergeten
+  document.getElementById('resetPasswordBtn').addEventListener('click', () => {
+    alert('Gebruik wachtwoord: "password"');
+  });
+
+  // Contact formulier
   document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    alert(`Thank you, ${document.getElementById('name').value}! Your message has been sent.`);
-    this.reset();
-  });
-  document.getElementById('registerForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert(`Thanks for registering, ${document.getElementById('regName').value}!`);
+    alert('Bericht verstuurd! Bedankt.');
     this.reset();
   });
 </script>
