@@ -3,105 +3,116 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Discord Bot Panel Demo</title>
+<title>Discord Bot Panel JS</title>
 <style>
   body { font-family: Arial, sans-serif; background: #222; color: #eee; padding: 20px; }
   h1 { text-align: center; }
   .container { max-width: 800px; margin: auto; }
-  input[type=text], input[type=password] { width: 100%; padding: 10px; margin: 5px 0; }
+  input[type=text] { width: 100%; padding: 10px; margin: 5px 0; }
   button { padding: 10px 20px; margin: 5px; cursor: pointer; }
-  .status { margin-top: 10px; }
+  .status { margin-top: 10px; font-weight: bold; }
   .commands { margin-top: 20px; }
-  .command { padding: 10px; background: #333; margin-top: 5px; }
+  .command { padding: 10px; background: #333; margin-top: 5px; display: flex; align-items: center; justify-content: space-between; }
+  .command span { margin-left: 10px; }
 </style>
 </head>
 <body>
 
-<h1>Discord Bot Panel Demo</h1>
-
+<h1>Discord Bot Panel Demo (JS)</h1>
 <div class="container">
 
-  <h2>Bot Token</h2>
-  <input type="text" id="token" placeholder="Voer je Discord Bot Token in" />
-  <button id="startBtn">Start Bot</button>
-  <button id="stopBtn">Stop Bot</button>
-  <div class="status" id="status"></div>
+<h2>Bot Token</h2>
+<input type="text" id="tokenInput" placeholder="Voer je Discord Bot Token in" />
+<button id="saveTokenBtn">Opslaan Token</button>
+<div class="status" id="botStatus"></div>
 
-  <h2>Commands Beheren</h2>
-  <div class="commands" id="commands">
-    <div class="command">
-      <strong>!checkcheater</strong>:
-      <button onclick="toggleCommand('checkcheater')">Toggle Aan/Uit</button>
-      <span id="checkcheater-status"></span>
-    </div>
-    <div class="command">
-      <strong>!autoMod</strong>:
-      <button onclick="toggleCommand('autoMod')">Toggle Aan/Uit</button>
-      <span id="autoMod-status"></span>
-    </div>
-    <!-- Voeg meer commands toe indien nodig -->
+<h2>Bot Actief / Stoppen</h2>
+<button id="startBotBtn">Start Bot</button>
+<button id="stopBotBtn">Stop Bot</button>
+
+<h2>Commands Beheren</h2>
+<div class="commands">
+  <div class="command">
+    <div><strong>!checkcheater</strong></div>
+    <button onclick="toggleCommand('checkcheater')">Toggle</button>
+    <span id="checkcheater-status"></span>
   </div>
+  <div class="command">
+    <div><strong>!autoMod</strong></div>
+    <button onclick="toggleCommand('autoMod')">Toggle</button>
+    <span id="autoMod-status"></span>
+  </div>
+  <!-- Voeg meer commands toe indien nodig -->
+</div>
 
 </div>
 
 <script>
-const backendUrl = 'https://jouwdomein.replit.app'; // Vervang door jouw backend URL
+const STORAGE_KEY = 'discordBotDemo';
 
-// Status ophalen
-async function fetchStatus() {
-  const res = await fetch(`${backendUrl}/status`);
-  const data = await res.json();
-  document.getElementById('status').innerText = 
-    data.botRunning ? 'Bot is ACTIEF' : 'Bot is STOPPEN';
-  document.getElementById('checkcheater-status').innerText = 
-    data.commands.checkcheater ? 'Aan' : 'Uit';
-  document.getElementById('autoMod-status').innerText = 
-    data.commands.autoMod ? 'Aan' : 'Uit';
+// Laad data uit localStorage of init
+function loadData() {
+  const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+    token: '',
+    botRunning: false,
+    commands: {
+      checkcheater: false,
+      autoMod: false,
+    }
+  };
+  return data;
 }
 
-// Bot starten
-document.getElementById('startBtn').onclick = () => {
-  const token = document.getElementById('token').value.trim();
-  if (!token) {
-    alert('Voer je bot token in!');
-    return;
-  }
-  fetch(`${backendUrl}/start`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ token }),
-  }).then(res => res.json()).then(() => {
-    alert('Bot gestart!');
-    fetchStatus();
-  }).catch(console.error);
+// Sla data op in localStorage
+function saveData(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+// Update UI op basis van opgeslagen data
+function updateUI() {
+  const data = loadData();
+  document.getElementById('tokenInput').value = data.token;
+  document.getElementById('botStatus').innerText = data.botRunning ? 'Bot is ACTIEF' : 'Bot is STOPPEN';
+
+  document.getElementById('checkcheater-status').innerText = data.commands.checkcheater ? 'Aan' : 'Uit';
+  document.getElementById('autoMod-status').innerText = data.commands.autoMod ? 'Aan' : 'Uit';
+}
+
+// Opslaan token
+document.getElementById('saveTokenBtn').onclick = () => {
+  const token = document.getElementById('tokenInput').value.trim();
+  const data = loadData();
+  data.token = token;
+  saveData(data);
+  alert('Token opgeslagen!');
 };
 
-// Bot stoppen
-document.getElementById('stopBtn').onclick = () => {
-  fetch(`${backendUrl}/stop`, { method: 'POST' })
-    .then(res => res.json())
-    .then(() => {
-      alert('Bot gestopt!');
-      fetchStatus();
-    }).catch(console.error);
+// Start bot
+document.getElementById('startBotBtn').onclick = () => {
+  const data = loadData();
+  data.botRunning = true;
+  saveData(data);
+  updateUI();
 };
 
-// Command toggles
+// Stop bot
+document.getElementById('stopBotBtn').onclick = () => {
+  const data = loadData();
+  data.botRunning = false;
+  saveData(data);
+  updateUI();
+};
+
+// Toggle command
 function toggleCommand(command) {
-  // Lees huidige status
-  const current = document.getElementById(`${command}-status`).innerText;
-  const newValue = current === 'Uit' ? true : false;
-  fetch(`${backendUrl}/setcommand`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ command, value: newValue }),
-  }).then(res => res.json()).then(() => {
-    fetchStatus();
-  }).catch(console.error);
+  const data = loadData();
+  data.commands[command] = !data.commands[command];
+  saveData(data);
+  updateUI();
 }
 
-// Initialiseer
-fetchStatus();
+// Bij laden pagina
+updateUI();
 </script>
 
 </body>
