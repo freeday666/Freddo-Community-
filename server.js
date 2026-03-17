@@ -1,39 +1,51 @@
-// Replit / Node.js backend voorbeeld
 const express = require('express');
 const app = express();
-app.use(express.json());
+const port = 3000;
 
-let botToken = '';
-let botRunning = false;
+app.use(express.json()); // voor het parsen van JSON body
 
-// Dummy command storage
-let commands = {
-  checkcheater: false,
-  autoMod: false,
-  // voeg meer commands toe
+// In-memory data
+let data = {
+    bot: {
+        running: false,
+        token: ""
+    },
+    commands: {
+        checkcheater: false,
+        autoMod: false
+    }
 };
 
-app.post('/start', (req, res) => {
-  botToken = req.body.token;
-  // Hier zou je je Discord bot starten met de token
-  botRunning = true;
-  res.json({ message: 'Bot gestart' });
+// API endpoints
+
+// Get bot status
+app.get('/bot', (req, res) => {
+    res.json(data.bot);
 });
 
-app.post('/stop', (req, res) => {
-  // Hier zou je je Discord bot stoppen
-  botRunning = false;
-  res.json({ message: 'Bot gestopt' });
+// Update bot status or token
+app.patch('/bot', (req, res) => {
+    data.bot = { ...data.bot, ...req.body };
+    res.json(data.bot);
 });
 
-app.post('/setcommand', (req, res) => {
-  const { command, value } = req.body;
-  commands[command] = value;
-  res.json({ message: `Command ${command} aangepast` });
+// Get commands status
+app.get('/commands', (req, res) => {
+    res.json(data.commands);
 });
 
-app.get('/status', (req, res) => {
-  res.json({ botRunning, commands });
+// Update command
+app.patch('/commands/:command', (req, res) => {
+    const cmd = req.params.command;
+    if (data.commands.hasOwnProperty(cmd)) {
+        data.commands[cmd] = req.body[cmd];
+        res.json({ [cmd]: data.commands[cmd] });
+    } else {
+        res.status(404).json({ error: 'Command niet gevonden' });
+    }
 });
 
-app.listen(3000, () => console.log('Backend draait op port 3000'));
+// Start server
+app.listen(port, () => {
+    console.log(`API server draait op http://localhost:${port}`);
+});
