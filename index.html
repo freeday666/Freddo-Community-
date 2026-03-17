@@ -2,108 +2,177 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProHost | Gratis Server Paneel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Edgeoni AI | Freddo Community APK</title>
     <style>
-        :root { --p: #4f46e5; --bg: #020617; --c: #1e293b; --t: #f1f5f9; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--t); margin: 0; }
-        
-        nav { background: #0f172a; padding: 1rem; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; }
-        .nav-links a { color: #94a3b8; text-decoration: none; margin-left: 15px; cursor: pointer; }
-        
-        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-        .section { display: none; }
-        .active { display: block; }
+        :root { --p: #5865F2; --bg: #050505; --card: #111111; --acc: #00f2ff; --text: #ffffff; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); margin: 0; padding-bottom: 80px; overflow-x: hidden; }
 
-        .card { background: var(--c); padding: 2rem; border-radius: 12px; border: 1px solid #334155; margin-bottom: 1rem; text-align: center; }
+        /* Auth Screen */
+        #auth-screen { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .auth-card { background: var(--card); padding: 30px; border-radius: 25px; border: 1px solid #333; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 0 40px rgba(0,242,255,0.1); }
         
-        input { width: 100%; padding: 12px; margin: 8px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px; box-sizing: border-box; }
-        
-        .btn { background: var(--p); color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn:hover { background: #4338ca; }
-        .btn:disabled { background: #475569; cursor: not-allowed; }
+        /* Header */
+        header { background: #000; padding: 20px; border-bottom: 2px solid var(--p); text-align: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-weight: 900; font-size: 1.6rem; color: var(--acc); letter-spacing: 2px; }
 
-        .price-tag { font-size: 1.5rem; color: #22c55e; margin: 10px 0; font-weight: bold; }
-        .server-item { background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid var(--p); display: flex; justify-content: space-between; }
+        /* UI Elements */
+        .container { padding: 20px; max-width: 600px; margin: auto; }
+        .card { background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid #222; margin-bottom: 20px; }
+        h2 { font-size: 1.2rem; margin-top: 0; color: var(--acc); }
+
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #000; border: 1px solid #333; color: white; border-radius: 12px; font-size: 1rem; }
+        input:focus { border-color: var(--acc); outline: none; }
+        
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .btn-p { background: var(--p); color: white; }
+        .btn-acc { background: var(--acc); color: black; }
+        .btn:active { transform: scale(0.98); }
+
+        /* Chat & Console */
+        .console { background: #000; color: #00ffaa; padding: 12px; height: 120px; overflow-y: auto; border-radius: 10px; font-family: monospace; font-size: 0.8rem; border: 1px solid #222; margin-top: 10px; }
+        #chat-box { height: 200px; overflow-y: auto; background: #000; padding: 15px; border-radius: 12px; border: 1px solid #222; margin-bottom: 10px; }
+        .msg { margin-bottom: 10px; font-size: 0.9rem; padding: 8px; background: #1a1a1a; border-radius: 8px; }
+
+        /* Nav */
+        nav { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; border-top: 1px solid #222; padding: 15px; z-index: 1000; }
+        .nav-item { flex: 1; text-align: center; color: #666; font-size: 0.8rem; font-weight: bold; }
+        .nav-item.active { color: var(--acc); }
+        .page { display: none; }
+        .active-page { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<nav>
-    <div style="font-weight: bold; color: var(--p);">PROHOST FREE</div>
-    <div class="nav-links">
-        <a onclick="show('store')">Winkel</a>
-        <a onclick="show('dash')">Mijn Servers</a>
-        <a id="user-display" onclick="show('login')" style="color:white;">Inloggen</a>
+<div id="auth-screen">
+    <div class="auth-card">
+        <div class="logo" style="margin-bottom:20px">EDGEONI AI</div>
+        <input type="text" id="user-name" placeholder="Naam">
+        <input type="text" id="access-code" placeholder="Toegangscode (free2026)">
+        <button class="btn btn-acc" onclick="app.auth()">ACCOUNT STARTEN</button>
+        <p style="font-size:0.7rem; color:#444; margin-top:20px">Freddo Community Cloud v1.0</p>
     </div>
-</nav>
-
-<div class="container">
-
-    <div id="store" class="section active">
-        <h1>Beschikbare Servers</h1>
-        <div class="card">
-            <h3>Minecraft Free Node</h3>
-            <p>2GB RAM | 100% Gratis</p>
-            <div class="price-tag">€0.00</div>
-            <button class="btn" id="buy-btn" onclick="claimServer('Minecraft Free')">Nu Claimen</button>
-            <p id="lock-msg" style="color: #ef4444; font-size: 0.8rem; margin-top: 10px;">Je moet ingelogd zijn om te claimen.</p>
-        </div>
-    </div>
-
-    <div id="login" class="section">
-        <h1>Account Beheer</h1>
-        <div class="card" id="login-form">
-            <h3>Maak een account</h3>
-            <input type="text" id="username" placeholder="Gebruikersnaam">
-            <input type="email" placeholder="E-mailadres">
-            <input type="password" id="password" placeholder="Wachtwoord">
-            <button class="btn" onclick="doLogin()">Account Aanmaken & Inloggen</button>
-        </div>
-        <div id="welcome-msg" class="card" style="display:none;">
-            <h3 id="hi-name"></h3>
-            <button class="btn" style="background:#ef4444;" onclick="doLogout()">Uitloggen</button>
-        </div>
-    </div>
-
-    <div id="dash" class="section">
-        <h1>Jouw Dashboard</h1>
-        <div id="server-container">
-            <p style="color:#94a3b8;">Je hebt nog geen actieve servers.</p>
-        </div>
-    </div>
-
 </div>
 
+<header>
+    <div class="logo">EDGEONI <span style="color:white">AI</span></div>
+</header>
+
+<div class="container">
+    <div id="page-home" class="page active-page">
+        <h2>🚀 Bot Hosting</h2>
+        <div class="card">
+            <label style="font-size:0.8rem; color:#888">Backend URL (Render link)</label>
+            <input type="text" id="backend-url" placeholder="https://jouw-backend.onrender.com">
+            <label style="font-size:0.8rem; color:#888">Discord Bot Token</label>
+            <input type="password" id="bot-token" placeholder="Plak token hier">
+            <button class="btn btn-p" onclick="app.deploy()">START BOT ONLINE</button>
+            <div class="console" id="log-box">> Systeem stand-by...</div>
+        </div>
+    </div>
+
+    <div id="page-chat" class="page">
+        <h2>Freddo Chat</h2>
+        <div class="card">
+            <div id="chat-box"></div>
+            <div style="display:flex; gap:10px">
+                <input type="text" id="chat-input" placeholder="Typ bericht..." style="margin:0">
+                <button class="btn btn-acc" style="width:70px" onclick="app.sendChat()">Zend</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-acc" class="page">
+        <h2>Instellingen</h2>
+        <div class="card">
+            <p>Ingelogd als: <b id="display-name">gast</b></p>
+            <button class="btn btn-acc" style="background:#ff4b4b; color:white" onclick="app.logout()">UITLOGGEN</button>
+        </div>
+    </div>
+</div>
+
+<nav>
+    <div class="nav-item active" id="n-home" onclick="app.nav('home')">HOSTING</div>
+    <div class="nav-item" id="n-chat" onclick="app.nav('chat')">CHAT</div>
+    <div class="nav-item" id="n-acc" onclick="app.nav('acc')">ACCOUNT</div>
+</nav>
+
 <script>
-    let user = localStorage.getItem('gh_user');
-    let myServers = JSON.parse(localStorage.getItem('gh_servers')) || [];
+    const app = {
+        session: JSON.parse(localStorage.getItem('eo_session')),
+        
+        auth: function() {
+            const u = document.getElementById('user-name').value;
+            const c = document.getElementById('access-code').value;
+            if(c === "free2026") {
+                localStorage.setItem('eo_session', JSON.stringify({name: u}));
+                location.reload();
+            } else { alert("Verkeerde code!"); }
+        },
 
-    function show(id) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        refresh();
-    }
+        init: function() {
+            if(this.session) {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('display-name').innerText = this.session.name;
+                document.getElementById('backend-url').value = localStorage.getItem('eo_url') || "";
+                this.loadChat();
+            }
+        },
 
-    function doLogin() {
-        const name = document.getElementById('username').value;
-        if(name.length < 2) return alert("Kies een naam");
-        localStorage.setItem('gh_user', name);
-        user = name;
-        show('store');
-        alert("Welkom " + name + "! Je kunt nu je gratis server claimen.");
-    }
+        deploy: async function() {
+            const url = document.getElementById('backend-url').value;
+            const token = document.getElementById('bot-token').value;
+            const log = document.getElementById('log-box');
+            
+            if(!url || !token) return alert("Vul alles in!");
+            localStorage.setItem('eo_url', url);
 
-    function doLogout() {
-        localStorage.removeItem('gh_user');
-        user = null;
-        location.reload();
-    }
+            log.innerHTML += `<div>[${new Date().toLocaleTimeString()}] Starten op cloud...</div>`;
+            try {
+                const res = await fetch(`${url}/deploy`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({token})
+                });
+                const data = await res.json();
+                log.innerHTML += `<div style="color:cyan">> ${data.status}</div>`;
+            } catch(e) {
+                log.innerHTML += `<div style="color:red">> FOUT: Kan backend niet bereiken!</div>`;
+            }
+        },
 
-    function claimServer(type) {
-        if(!user) {
-            alert("Je moet eerst inloggen!");
-            show('login');
+        sendChat: function() {
+            const m = document.getElementById('chat-input').value;
+            if(!m) return;
+            let chats = JSON.parse(localStorage.getItem('eo_chats')) || [];
+            chats.push({u: this.session.name, m: m});
+            localStorage.setItem('eo_chats', JSON.stringify(chats));
+            document.getElementById('chat-input').value = "";
+            this.loadChat();
+        },
+
+        loadChat: function() {
+            const box = document.getElementById('chat-box');
+            const chats = JSON.parse(localStorage.getItem('eo_chats')) || [];
+            box.innerHTML = chats.map(c => `<div class="msg"><b>${c.u}:</b> ${c.m}</div>`).join('');
+            box.scrollTop = box.scrollHeight;
+        },
+
+        nav: function(p) {
+            document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active-page'));
+            document.querySelectorAll('.nav-item').forEach(ni => ni.classList.remove('active'));
+            document.getElementById('page-'+p).classList.add('active-page');
+            document.getElementById('n-'+p).classList.add('active');
+        },
+
+        logout: function() { localStorage.clear(); location.reload(); }
+    };
+    window.onload = () => app.init();
+</script>
+</body>
+</html>
             return;
         }
         const srv = { id: Math.floor(Math.random()*9999), type: type, date: new Date().toLocaleDateString() };
