@@ -2,89 +2,151 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Freddo Admin Panel v4</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freddo System v5 | Admin Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; }
-        .terminal-box { border: 1px solid #00ff41; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
-        input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; }
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+        body { background-color: #050505; color: #00ff41; font-family: 'Space Mono', monospace; }
+        .glass { background: rgba(10, 20, 10, 0.9); border: 1px solid #00ff41; box-shadow: 0 0 20px rgba(0, 255, 65, 0.1); }
+        input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 12px; border-radius: 4px; }
+        .btn-glow:hover { box-shadow: 0 0 15px #00ff41; }
     </style>
 </head>
-<body class="p-10">
+<body class="flex items-center justify-center min-h-screen p-4 overflow-hidden">
 
-    <div id="login-screen" class="max-w-md mx-auto terminal-box p-8 rounded">
-        <h1 class="text-2xl mb-6 text-center font-bold tracking-widest text-white">FREDDO_LOGIN</h1>
-        <input type="text" id="user" placeholder="USERNAME" class="w-full mb-4">
-        <input type="password" id="pass" placeholder="PASSWORD" class="w-full mb-6">
-        <button onclick="login()" class="w-full bg-green-900 hover:bg-green-700 text-white font-bold p-3 transition">ENTRY</button>
+    <div id="login-screen" class="glass p-10 rounded-lg w-full max-w-md text-center">
+        <h1 class="text-3xl font-bold mb-8 tracking-widest uppercase">Freddo_OS Login</h1>
+        <div class="flex flex-col gap-4">
+            <input type="text" id="user" placeholder="GEBRUIKERSNAAM" autocomplete="off">
+            <input type="password" id="pass" placeholder="WACHTWOORD">
+            <button onclick="attemptLogin()" class="bg-green-900 text-white font-bold p-4 mt-4 btn-glow transition uppercase">Toegang Verlenen</button>
+            <p id="error-msg" class="text-red-500 text-xs mt-2 hidden">!! TOEGANG GEWEIGERD !!</p>
+        </div>
     </div>
 
-    <div id="admin-panel" class="hidden terminal-box p-8 rounded max-w-4xl mx-auto">
-        <h1 class="text-xl mb-4 border-b border-green-800 pb-2">SYSTEM_LOGS // LIVE_TRAFFIC</h1>
-        
-        <div class="grid grid-cols-1 gap-4 mb-6">
-            <div class="bg-black p-4 border border-green-900">
-                <p class="text-xs text-green-700 mb-2">// LAATSTE ACTIVITEIT</p>
-                <div id="log-content" class="text-sm">Wachten op data...</div>
-            </div>
-        </div>
+    <div id="admin-panel" class="hidden w-full max-w-5xl h-[80vh] glass p-6 rounded-lg overflow-y-auto">
+        <header class="flex justify-between items-center border-b border-green-900 pb-4 mb-6">
+            <h2 class="text-xl font-bold uppercase">> Freddo_Control_Panel_v5.0</h2>
+            <button onclick="location.reload()" class="text-xs border border-red-500 text-red-500 px-2 py-1 hover:bg-red-900 hover:text-white transition">LOGOUT</button>
+        </header>
 
-        <div class="text-xs text-green-700">
-            INFO: Alle bezoekersdata wordt direct naar je Discord verzonden.
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-1 space-y-4">
+                <div class="bg-black p-4 border border-green-900">
+                    <h3 class="text-sm font-bold mb-2 text-white">JOUW SESSIE INFO</h3>
+                    <p class="text-xs">IP: <span id="my-ip" class="text-blue-400">Laden...</span></p>
+                    <p class="text-xs">USER_ID: <span class="text-yellow-400">#F-9921</span></p>
+                </div>
+                <div class="bg-black p-4 border border-green-900">
+                    <h3 class="text-sm font-bold mb-2 text-white">SYSTEM STATUS</h3>
+                    <p class="text-xs">DATABASE: <span class="text-green-500 underline">ONLINE</span></p>
+                    <p class="text-xs">DISCORD_LOGS: <span class="text-green-500 underline">ACTIEF</span></p>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 space-y-6">
+                <div class="bg-black p-6 border border-green-900">
+                    <h3 class="mb-4 text-white uppercase">User ID Zoekmachine</h3>
+                    <div class="flex gap-2 mb-6">
+                        <input type="text" id="search-id" placeholder="Voer User ID in..." class="flex-1 text-sm">
+                        <button onclick="searchUser()" class="bg-green-600 text-black px-6 font-bold hover:bg-green-400">SCAN</button>
+                    </div>
+
+                    <div id="user-result" class="hidden space-y-4 p-4 border-l-4 border-blue-500 bg-slate-900">
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div><span class="text-gray-500">ID:</span> <span id="res-id">--</span></div>
+                            <div><span class="text-gray-500">HACKS:</span> <span id="res-hacks" class="text-red-400 font-bold">--</span></div>
+                            <div><span class="text-gray-500">WOONPLAATS:</span> <span id="res-geo">--</span></div>
+                            <div><span class="text-gray-500">DISCORD:</span> <span id="res-discord">--</span></div>
+                        </div>
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="sendAction('BAN')" class="bg-red-600 text-white text-xs px-4 py-2 font-bold uppercase hover:bg-red-500">Ban Gebruiker</button>
+                            <button onclick="sendAction('TRACK')" class="border border-blue-500 text-blue-500 text-xs px-4 py-2 font-bold uppercase">Update Locatie</button>
+                        </div>
+                    </div>
+                    <p id="not-found" class="hidden text-red-500 text-xs italic">ID niet gevonden in de cache.</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // CONFIGURATIE
-        const DISCORD_WEBHOOK = "HIER_JE_DISCORD_WEBHOOK_URL_PLAKKEN";
+        // --- CONFIGURATIE ---
+        const DISCORD_WEBHOOK = "HIER_JOUW_WEBHOOK_URL_PLAKKEN";
 
-        // 1. Automatisch data verzamelen bij bezoek
-        async function trackVisitor() {
-            try {
-                const ipRes = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipRes.json();
-                
-                // Check of ze "cheaten" (Inspect element open)
-                let cheatDetected = (window.outerWidth - window.innerWidth > 160) ? "JA (Console open)" : "NEE";
+        // Nep-database (omdat we geen echte server hebben)
+        const fakeUsers = {
+            "123": { id: "123", hacks: "Wallhack, Fly", geo: "Rotterdam, NL", discord: "FreddoFan#0001" },
+            "456": { id: "456", hacks: "None", geo: "Antwerpen, BE", discord: "GamerNL#1234" },
+            "789": { id: "789", hacks: "Speedhack Detected", geo: "Amsterdam, NL", discord: "UnknownUser" }
+        };
 
-                const logMessage = {
-                    embeds: [{
-                        title: "🚀 Nieuwe Bezoeker Gedetecteerd",
-                        color: 65280,
-                        fields: [
-                            { name: "IP Adres", value: ipData.ip, inline: true },
-                            { name: "Cheat Status", value: cheatDetected, inline: true },
-                            { name: "Browser", value: navigator.userAgent, inline: false }
-                        ],
-                        footer: { text: "Freddo Tracking System" }
-                    }]
-                };
+        // --- FUNCTIES ---
 
-                // Verzend naar Discord
-                fetch(DISCORD_WEBHOOK, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(logMessage)
-                });
-
-                document.getElementById('log-content').innerHTML = `> IP ${ipData.ip} verbonden. Status: ${cheatDetected}`;
-            } catch (e) {
-                console.log("Tracking error");
-            }
-        }
-
-        // 2. Login Functie
-        function login() {
+        async function attemptLogin() {
             const u = document.getElementById('user').value;
             const p = document.getElementById('pass').value;
 
             if(u === "freddo" && p === "administratie") {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('admin-panel').classList.remove('hidden');
-                trackVisitor(); // Start tracking zodra ingelogd
+                startSystem();
             } else {
-                alert("ACCESS DENIED");
+                document.getElementById('error-msg').classList.remove('hidden');
             }
+        }
+
+        async function startSystem() {
+            // IP ophalen
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            document.getElementById('my-ip').innerText = data.ip;
+
+            // Log naar Discord dat admin is ingelogd
+            logToDiscord("ADMIN_LOGIN", `Admin Freddo is ingelogd vanuit IP: ${data.ip}`);
+        }
+
+        function searchUser() {
+            const id = document.getElementById('search-id').value;
+            const display = document.getElementById('user-result');
+            const error = document.getElementById('not-found');
+
+            if(fakeUsers[id]) {
+                display.classList.remove('hidden');
+                error.classList.add('hidden');
+                document.getElementById('res-id').innerText = "#" + fakeUsers[id].id;
+                document.getElementById('res-hacks').innerText = fakeUsers[id].hacks;
+                document.getElementById('res-geo').innerText = fakeUsers[id].geo;
+                document.getElementById('res-discord').innerText = fakeUsers[id].discord;
+                logToDiscord("SEARCH_ID", `Admin heeft gezocht naar User ID: ${id}`);
+            } else {
+                display.classList.add('hidden');
+                error.classList.remove('hidden');
+            }
+        }
+
+        function sendAction(type) {
+            const id = document.getElementById('res-id').innerText;
+            alert(`Actie ${type} uitgevoerd op gebruiker ${id}`);
+            logToDiscord("ACTION_TAKEN", `Actie: ${type} uitgevoerd op User: ${id}`);
+        }
+
+        function logToDiscord(event, message) {
+            if(DISCORD_WEBHOOK === "HIER_JOUW_WEBHOOK_URL_PLAKKEN") return;
+
+            fetch(DISCORD_WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    embeds: [{
+                        title: event,
+                        description: message,
+                        color: 65280,
+                        timestamp: new Date()
+                    }]
+                })
+            });
         }
     </script>
 </body>
