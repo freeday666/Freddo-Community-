@@ -1,74 +1,41 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Discord & Security Checker</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #2c2f33; color: white; display: flex; justify-content: center; padding: 20px; }
-        .container { background: #23272a; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 100%; max-width: 600px; }
-        h1 { color: #7289da; text-align: center; }
-        label { display: block; margin-top: 15px; color: #99aab5; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: none; background: #40444b; color: white; box-sizing: border-box; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        button { padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-lookup { background: #7289da; color: white; grid-column: span 2; }
-        .btn-lookup:hover { background: #5b70be; }
-        .btn-tool { background: #4f545c; color: #fff; font-size: 0.8em; }
-        .btn-tool:hover { background: #99aab5; }
-        .footer { margin-top: 20px; font-size: 0.8em; color: #72767d; text-align: center; }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Discord Bot Control</title>
 </head>
 <body>
+    <h1>Discord Bot beheer</h1>
+    <p>Voer je bot token in om verbinding te maken:</p>
+    <input type="text" id="token" placeholder="Bot Token" size="50"/>
+    <button onclick="startBot()">Start Bot</button>
+    <p id="status"></p>
 
-<div class="container">
-    <h1>Security Checker</h1>
-    
-    <label for="targetId">Discord User ID:</label>
-    <input type="text" id="targetId" placeholder="Bijv. 155149108183695360">
+    <script>
+        function startBot() {
+            const token = document.getElementById('token').value;
+            if (!token) {
+                alert('Voer je bot token in!');
+                return;
+            }
 
-    <label for="targetIp">IP Adres (optioneel):</label>
-    <input type="text" id="targetIp" placeholder="Bijv. 1.1.1.1">
-
-    <div class="grid">
-        <button class="btn-lookup" onclick="checkAll()">VOER VOLLEDIGE CHECK UIT</button>
-        
-        <button class="btn-tool" onclick="openLink('https://discord.id/?prefill=' + getID())">Discord ID Info</button>
-        <button class="btn-tool" onclick="openLink('https://lookup.guru/' + getID())">Lookup Guru</button>
-        <button class="btn-tool" onclick="openLink('https://badlion.net/player/' + getID())">Cheat Check (Badlion)</button>
-        <button class="btn-tool" onclick="openLink('https://vacbanned.com/engine/check')">Steam/VAC Check</button>
-        <button class="btn-tool" onclick="openLink('https://iphub.info/?ip=' + getIP())">IP Proxy/VPN Check</button>
-        <button class="btn-tool" onclick="openLink('https://scamalytics.com/ip/' + getIP())">IP Fraud Score</button>
-    </div>
-
-    <div class="footer">
-        Let op: Gebruik deze tool alleen voor legitieme veiligheidsdoeleinden.
-    </div>
-</div>
-
-<script>
-    function getID() { return document.getElementById('targetId').value; }
-    function getIP() { return document.getElementById('targetIp').value; }
-
-    function openLink(url) {
-        if (!getID() && url.includes('ID')) {
-            alert('Voer eerst een Discord ID in.');
-            return;
+            fetch('http://10.1.248.72:8080/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token: token }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('status').innerText = data.message || 'Bot gestart!';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                document.getElementById('status').innerText = 'Fout bij starten van de bot.';
+            });
         }
-        window.open(url, '_blank');
-    }
-
-    function checkAll() {
-        const id = getID();
-        if (!id) {
-            alert("Voer een Discord ID in voor een volledige scan.");
-            return;
-        }
-        // Opent de twee meest relevante profiel check pagina's
-        window.open('https://discord.id/?prefill=' + id, '_blank');
-        window.open('https://lookup.guru/' + id, '_blank');
-    }
-</script>
-
+    </script>
 </body>
 </html>
