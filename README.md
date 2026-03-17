@@ -1,7 +1,7 @@
 # 🐸 FREDDO COMMUNITY
 
 <p align="center">
-  <img src="freddo.png" width="300"/>
+  <img src="download.jpg" width="300"/>
 </p>
 
 <p align="center">
