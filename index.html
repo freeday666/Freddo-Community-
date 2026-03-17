@@ -1,63 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Discord User ID Checker</title>
-<style>
-  body { font-family: Arial, sans-serif; background: #2c2f33; color: #fff; margin:0; padding:20px; }
-  #checker { max-width: 600px; margin: auto; padding:20px; background:#23272a; border-radius:8px; }
-  input { width: calc(100% - 20px); padding:10px; margin-bottom:10px; border:none; border-radius:4px; }
-  button { padding:10px 20px; border:none; border-radius:4px; background:#7289da; color:#fff; cursor:pointer; }
-  #result { margin-top:20px; background:#2c2f33; padding:10px; border-radius:8px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Discord & Security Checker</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #2c2f33; color: white; display: flex; justify-content: center; padding: 20px; }
+        .container { background: #23272a; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 100%; max-width: 600px; }
+        h1 { color: #7289da; text-align: center; }
+        label { display: block; margin-top: 15px; color: #99aab5; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: none; background: #40444b; color: white; box-sizing: border-box; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        button { padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-lookup { background: #7289da; color: white; grid-column: span 2; }
+        .btn-lookup:hover { background: #5b70be; }
+        .btn-tool { background: #4f545c; color: #fff; font-size: 0.8em; }
+        .btn-tool:hover { background: #99aab5; }
+        .footer { margin-top: 20px; font-size: 0.8em; color: #72767d; text-align: center; }
+    </style>
 </head>
 <body>
 
-<div id="checker">
-  <h2>Discord User ID Checker</h2>
-  <input type="text" id="discordId" placeholder="Voer Discord ID in" />
-  <button onclick="checkUser()">Check User</button>
-  
-  <div id="result"></div>
+<div class="container">
+    <h1>Security Checker</h1>
+    
+    <label for="targetId">Discord User ID:</label>
+    <input type="text" id="targetId" placeholder="Bijv. 155149108183695360">
+
+    <label for="targetIp">IP Adres (optioneel):</label>
+    <input type="text" id="targetIp" placeholder="Bijv. 1.1.1.1">
+
+    <div class="grid">
+        <button class="btn-lookup" onclick="checkAll()">VOER VOLLEDIGE CHECK UIT</button>
+        
+        <button class="btn-tool" onclick="openLink('https://discord.id/?prefill=' + getID())">Discord ID Info</button>
+        <button class="btn-tool" onclick="openLink('https://lookup.guru/' + getID())">Lookup Guru</button>
+        <button class="btn-tool" onclick="openLink('https://badlion.net/player/' + getID())">Cheat Check (Badlion)</button>
+        <button class="btn-tool" onclick="openLink('https://vacbanned.com/engine/check')">Steam/VAC Check</button>
+        <button class="btn-tool" onclick="openLink('https://iphub.info/?ip=' + getIP())">IP Proxy/VPN Check</button>
+        <button class="btn-tool" onclick="openLink('https://scamalytics.com/ip/' + getIP())">IP Fraud Score</button>
+    </div>
+
+    <div class="footer">
+        Let op: Gebruik deze tool alleen voor legitieme veiligheidsdoeleinden.
+    </div>
 </div>
 
 <script>
-function checkUser() {
-  const userId = document.getElementById('discordId').value.trim();
-  if(!userId) {
-    alert('Voer een Discord ID in');
-    return;
-  }
+    function getID() { return document.getElementById('targetId').value; }
+    function getIP() { return document.getElementById('targetIp').value; }
 
-  // Hier moet je je backend API URL invullen
-  fetch('https://jouw-backend-api.com/getDiscordUser', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ id: userId })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if(data.error) {
-      document.getElementById('result').innerHTML = `<p style="color:red;">${data.error}</p>`;
-    } else {
-      // Toon info
-      document.getElementById('result').innerHTML = `
-        <h3>Gebruiker Informatie</h3>
-        <p><strong>Naam:</strong> ${data.username}#${data.discriminator}</p>
-        <p><strong>ID:</strong> ${data.id}</p>
-        <p><strong>Bot:</strong> ${data.bot ? 'Ja' : 'Nee'}</p>
-        <p><strong>Avatar:</strong> <img src="${data.avatar_url}" width="50" /></p>
-        <!-- Voeg meer info toe zoals roles, status, etc. als beschikbaar -->
-      `;
+    function openLink(url) {
+        if (!getID() && url.includes('ID')) {
+            alert('Voer eerst een Discord ID in.');
+            return;
+        }
+        window.open(url, '_blank');
     }
-  })
-  .catch(err => {
-    document.getElementById('result').innerHTML = `<p style="color:red;">Fout bij ophalen gegevens</p>`;
-  });
-}
+
+    function checkAll() {
+        const id = getID();
+        if (!id) {
+            alert("Voer een Discord ID in voor een volledige scan.");
+            return;
+        }
+        // Opent de twee meest relevante profiel check pagina's
+        window.open('https://discord.id/?prefill=' + id, '_blank');
+        window.open('https://lookup.guru/' + id, '_blank');
+    }
 </script>
 
 </body>
