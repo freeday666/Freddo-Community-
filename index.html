@@ -1,33 +1,151 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <title>FiveM Admin Panel - Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freddo Admin | FiveM Dashboard</title>
     <style>
-        body { font-family: sans-serif; background: #2c3e50; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .login-card { background: #34495e; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        input { display: block; width: 100%; margin: 10px 0; padding: 10px; border-radius: 4px; border: none; }
-        button { width: 100%; padding: 10px; background: #e74c3c; color: white; border: none; cursor: pointer; }
+        :root {
+            --primary: #7289da; /* Discord Blue */
+            --bg: #1a1b1e;
+            --card: #25262b;
+            --text: #ffffff;
+            --danger: #fa5252;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigatie */
+        nav {
+            background: var(--card);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #373a40;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Kaarten & Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border: 1px solid #373a40;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #373a40;
+            background: #2c2e33;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: var(--primary);
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        button:hover { background: #5b70be; }
+        .btn-danger { background: var(--danger); }
+
+        /* Status Indicatoren */
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background: rgba(250, 82, 82, 0.2);
+            color: var(--danger);
+        }
+
+        /* Mobiele aanpassingen */
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: 1fr; }
+            h2 { font-size: 1.2rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <h2>Admin Login</h2>
-        <input type="text" id="user" placeholder="Gebruikersnaam">
-        <input type="password" id="pass" placeholder="Wachtwoord">
-        <button onclick="checkLogin()">Inloggen</button>
+
+<nav>
+    <strong>FREDDO PANEL</strong>
+    <span style="color: var(--primary)">Ingelogd als: admin</span>
+</nav>
+
+<div class="container">
+    <h2><span style="color: var(--primary)">#</span> Speler Check & Anti-Cheat</h2>
+    
+    <div class="grid">
+        <div class="card">
+            <h3>Check Speler</h3>
+            <input type="text" placeholder="Discord ID (bijv. 12345678...)" id="discordId">
+            <input type="text" placeholder="Server ID (bijv. 42)" id="serverId">
+            <button onclick="scanPlayer()">Scan op Hacks/Cheats</button>
+        </div>
+
+        <div class="card">
+            <h3>Recente Meldingen</h3>
+            <div style="border-left: 3px solid var(--danger); padding-left: 10px; margin-bottom: 10px;">
+                <small>14:05</small><br>
+                <strong>PlayerID 12 (Kees)</strong> - Speedhack gedetecteerd <span class="status-badge">Hoog Risico</span>
+            </div>
+            <div style="border-left: 3px solid #fcc419; padding-left: 10px;">
+                <small>13:58</small><br>
+                <strong>PlayerID 88 (Freddo)</strong> - Onbekende Injectie <span class="status-badge" style="color:#fcc419; background:rgba(252,196,25,0.1)">Waarschuwing</span>
+            </div>
+        </div>
     </div>
 
-    <script>
-        function checkLogin() {
-            const user = document.getElementById('user').value;
-            const pass = document.getElementById('pass').value;
-            if(user === "freddo" && pass === "admin") {
-                alert("Welkom Freddo!");
-                // Hier zou je doorsturen naar het paneel
-            } else {
-                alert("Foutieve gegevens!");
-            }
+    <div class="card" style="margin-top: 20px;">
+        <h3>Server Acties</h3>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-danger">Kick Iedereen</button>
+            <button style="background: #40c057;">Schoon Logs</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function scanPlayer() {
+        const id = document.getElementById('discordId').value;
+        if(id === "") {
+            alert("Voer eerst een Discord ID in!");
+            return;
         }
-    </script>
+        alert("Systeem scant Discord ID: " + id + " op actieve FiveM cheats...");
+        // In een echte setup stuurt dit een verzoek naar je FiveM server database
+    }
+</script>
+
 </body>
 </html>
