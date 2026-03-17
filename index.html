@@ -1,119 +1,108 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Discord Bot Panel JS</title>
-<style>
-  body { font-family: Arial, sans-serif; background: #222; color: #eee; padding: 20px; }
-  h1 { text-align: center; }
-  .container { max-width: 800px; margin: auto; }
-  input[type=text] { width: 100%; padding: 10px; margin: 5px 0; }
-  button { padding: 10px 20px; margin: 5px; cursor: pointer; }
-  .status { margin-top: 10px; font-weight: bold; }
-  .commands { margin-top: 20px; }
-  .command { padding: 10px; background: #333; margin-top: 5px; display: flex; align-items: center; justify-content: space-between; }
-  .command span { margin-left: 10px; }
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Hosting Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="file"] {
+            margin-top: 5px;
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        .game-list {
+            margin-top: 30px;
+        }
+        .game {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .game:last-child {
+            border-bottom: none;
+        }
+        /* Responsive design */
+        @media(max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Game Hosting Service</h1>
+    </header>
 
-<h1>Discord Bot Panel Demo (JS)</h1>
-<div class="container">
+    <div class="container">
+        <h2>Upload je game</h2>
+        <form>
+            <label for="gamenaam">Gamenaam:</label>
+            <input type="text" id="gamenaam" name="gamenaam" placeholder="Naam van je game" />
 
-<h2>Bot Token</h2>
-<input type="text" id="tokenInput" placeholder="Voer je Discord Bot Token in" />
-<button id="saveTokenBtn">Opslaan Token</button>
-<div class="status" id="botStatus"></div>
+            <label for="gamefile">Selecteer gamebestand:</label>
+            <input type="file" id="gamefile" name="gamefile" />
 
-<h2>Bot Actief / Stoppen</h2>
-<button id="startBotBtn">Start Bot</button>
-<button id="stopBotBtn">Stop Bot</button>
+            <button type="submit">Upload game</button>
+        </form>
 
-<h2>Commands Beheren</h2>
-<div class="commands">
-  <div class="command">
-    <div><strong>!checkcheater</strong></div>
-    <button onclick="toggleCommand('checkcheater')">Toggle</button>
-    <span id="checkcheater-status"></span>
-  </div>
-  <div class="command">
-    <div><strong>!autoMod</strong></div>
-    <button onclick="toggleCommand('autoMod')">Toggle</button>
-    <span id="autoMod-status"></span>
-  </div>
-  <!-- Voeg meer commands toe indien nodig -->
-</div>
-
-</div>
-
-<script>
-const STORAGE_KEY = 'discordBotDemo';
-
-// Laad data uit localStorage of init
-function loadData() {
-  const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-    token: '',
-    botRunning: false,
-    commands: {
-      checkcheater: false,
-      autoMod: false,
-    }
-  };
-  return data;
-}
-
-// Sla data op in localStorage
-function saveData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-// Update UI op basis van opgeslagen data
-function updateUI() {
-  const data = loadData();
-  document.getElementById('tokenInput').value = data.token;
-  document.getElementById('botStatus').innerText = data.botRunning ? 'Bot is ACTIEF' : 'Bot is STOPPEN';
-
-  document.getElementById('checkcheater-status').innerText = data.commands.checkcheater ? 'Aan' : 'Uit';
-  document.getElementById('autoMod-status').innerText = data.commands.autoMod ? 'Aan' : 'Uit';
-}
-
-// Opslaan token
-document.getElementById('saveTokenBtn').onclick = () => {
-  const token = document.getElementById('tokenInput').value.trim();
-  const data = loadData();
-  data.token = token;
-  saveData(data);
-  alert('Token opgeslagen!');
-};
-
-// Start bot
-document.getElementById('startBotBtn').onclick = () => {
-  const data = loadData();
-  data.botRunning = true;
-  saveData(data);
-  updateUI();
-};
-
-// Stop bot
-document.getElementById('stopBotBtn').onclick = () => {
-  const data = loadData();
-  data.botRunning = false;
-  saveData(data);
-  updateUI();
-};
-
-// Toggle command
-function toggleCommand(command) {
-  const data = loadData();
-  data.commands[command] = !data.commands[command];
-  saveData(data);
-  updateUI();
-}
-
-// Bij laden pagina
-updateUI();
-</script>
-
+        <div class="game-list">
+            <h2>Geüploade games</h2>
+            <div class="game">
+                <strong>Super Avontuur</strong> - 01-01-2024
+            </div>
+            <div class="game">
+                <strong>Racekampioen</strong> - 02-01-2024
+            </div>
+            <div class="game">
+                <strong> puzzelwereld</strong> - 03-01-2024
+            </div>
+        </div>
+    </div>
 </body>
 </html>
