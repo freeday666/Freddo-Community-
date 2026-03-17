@@ -1,164 +1,153 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Freddo Community - Gangsta Vibe</title>
-<!-- Font Awesome voor iconen -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
-<style>
-  body {
-    margin: 0;
-    font-family: 'Orbitron', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    background-size: 600% 600%;
-    animation: gradientBG 15s ease infinite;
-    color: #fff;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProHost | Gratis Server Paneel</title>
+    <style>
+        :root { --p: #4f46e5; --bg: #020617; --c: #1e293b; --t: #f1f5f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--t); margin: 0; }
+        
+        nav { background: #0f172a; padding: 1rem; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; }
+        .nav-links a { color: #94a3b8; text-decoration: none; margin-left: 15px; cursor: pointer; }
+        
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .section { display: none; }
+        .active { display: block; }
 
-  @keyframes gradientBG {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
-  }
+        .card { background: var(--c); padding: 2rem; border-radius: 12px; border: 1px solid #334155; margin-bottom: 1rem; text-align: center; }
+        
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px; box-sizing: border-box; }
+        
+        .btn { background: var(--p); color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn:hover { background: #4338ca; }
+        .btn:disabled { background: #475569; cursor: not-allowed; }
 
-  h1, h2, h3 {
-    text-align: center;
-    margin-top: 20px;
-    text-shadow: 2px 2px 4px #000;
-  }
-
-  /* Inlogformulier stijl */
-  form {
-    max-width: 350px;
-    margin: 20px auto;
-    padding: 20px;
-    background: rgba(0,0,0,0.6);
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  }
-
-  input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: none;
-    font-family: 'Orbitron', sans-serif;
-  }
-
-  input[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    background-color: #ff4b2b;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-
-  input[type="submit"]:hover {
-    background-color: #ff416c;
-  }
-
-  /* Berichten stijl */
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    margin: 20px;
-  }
-
-  .bericht {
-    background: rgba(255,255,255,0.1);
-    border-radius: 20px;
-    padding: 20px;
-    width: 300px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-    backdrop-filter: blur(10px);
-    position: relative;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-
-  .bericht:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.5);
-  }
-
-  /* Icons en emojis styling */
-  .icons {
-    text-align: center;
-    font-size: 2em;
-    margin-top: 10px;
-  }
-  .icon {
-    margin: 0 10px;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  .icon:hover {
-    transform: scale(1.2);
-    color: #ff4b2b;
-  }
-
-  /* Footer style */
-  footer {
-    text-align: center;
-    padding: 20px;
-    font-size: 0.9em;
-    color: #ddd;
-  }
-</style>
+        .price-tag { font-size: 1.5rem; color: #22c55e; margin: 10px 0; font-weight: bold; }
+        .server-item { background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid var(--p); display: flex; justify-content: space-between; }
+    </style>
 </head>
 <body>
 
-<h1>🕶️ Freddo Community - Gangsta Style</h1>
+<nav>
+    <div style="font-weight: bold; color: var(--p);">PROHOST FREE</div>
+    <div class="nav-links">
+        <a onclick="show('store')">Winkel</a>
+        <a onclick="show('dash')">Mijn Servers</a>
+        <a id="user-display" onclick="show('login')" style="color:white;">Inloggen</a>
+    </div>
+</nav>
 
-<!-- Inlogformulier -->
-<form action="#" method="post">
-  <h2>Inloggen <i class="fas fa-lock"></i></h2>
-  <input type="text" placeholder="Gebruikersnaam" required />
-  <input type="password" placeholder="Wachtwoord" required />
-  <input type="submit" value="Inloggen" />
-</form>
-<h3 style="text-align:center;">Gebruik wachtwoord: freddo55</h3>
-
-<!-- Blog berichten -->
 <div class="container">
-  <div class="bericht">
-    <h3>🔥 Nieuwe Dieren Update</h3>
-    <p>Vandaag hebben we nieuwe dieren toegevoegd aan onze community. Check ze uit!</p>
-    <div class="icons">
-      <i class="fas fa-upload icon" title="Uploaden"></i>
-      <i class="fas fa-trash icon" title="Verwijderen"></i>
-      <i class="fas fa-edit icon" title="Aanpassen"></i>
+
+    <div id="store" class="section active">
+        <h1>Beschikbare Servers</h1>
+        <div class="card">
+            <h3>Minecraft Free Node</h3>
+            <p>2GB RAM | 100% Gratis</p>
+            <div class="price-tag">€0.00</div>
+            <button class="btn" id="buy-btn" onclick="claimServer('Minecraft Free')">Nu Claimen</button>
+            <p id="lock-msg" style="color: #ef4444; font-size: 0.8rem; margin-top: 10px;">Je moet ingelogd zijn om te claimen.</p>
+        </div>
     </div>
-  </div>
-  <div class="bericht">
-    <h3>🍽️ Freddo Community Eten</h3>
-    <p>Deel jouw favoriete recepten en eetervaringen met de community!</p>
-    <div class="icons">
-      <i class="fas fa-upload icon" title="Uploaden"></i>
-      <i class="fas fa-trash icon" title="Verwijderen"></i>
-      <i class="fas fa-edit icon" title="Aanpassen"></i>
+
+    <div id="login" class="section">
+        <h1>Account Beheer</h1>
+        <div class="card" id="login-form">
+            <h3>Maak een account</h3>
+            <input type="text" id="username" placeholder="Gebruikersnaam">
+            <input type="email" placeholder="E-mailadres">
+            <input type="password" id="password" placeholder="Wachtwoord">
+            <button class="btn" onclick="doLogin()">Account Aanmaken & Inloggen</button>
+        </div>
+        <div id="welcome-msg" class="card" style="display:none;">
+            <h3 id="hi-name"></h3>
+            <button class="btn" style="background:#ef4444;" onclick="doLogout()">Uitloggen</button>
+        </div>
     </div>
-  </div>
+
+    <div id="dash" class="section">
+        <h1>Jouw Dashboard</h1>
+        <div id="server-container">
+            <p style="color:#94a3b8;">Je hebt nog geen actieve servers.</p>
+        </div>
+    </div>
+
 </div>
 
-<!-- Emotes en gangsta icons -->
-<div class="icons" style="text-align:center; margin-top:30px;">
-  <span style="font-size:2em;">🤙🔥💀💣🕶️</span>
-</div>
+<script>
+    let user = localStorage.getItem('gh_user');
+    let myServers = JSON.parse(localStorage.getItem('gh_servers')) || [];
 
-<!-- Footer -->
-<footer>
-  &copy; 2024 Freddo Community. Alleen inloggen geeft beheerrechten.
-</footer>
+    function show(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        refresh();
+    }
+
+    function doLogin() {
+        const name = document.getElementById('username').value;
+        if(name.length < 2) return alert("Kies een naam");
+        localStorage.setItem('gh_user', name);
+        user = name;
+        show('store');
+        alert("Welkom " + name + "! Je kunt nu je gratis server claimen.");
+    }
+
+    function doLogout() {
+        localStorage.removeItem('gh_user');
+        user = null;
+        location.reload();
+    }
+
+    function claimServer(type) {
+        if(!user) {
+            alert("Je moet eerst inloggen!");
+            show('login');
+            return;
+        }
+        const srv = { id: Math.floor(Math.random()*9999), type: type, date: new Date().toLocaleDateString() };
+        myServers.push(srv);
+        localStorage.setItem('gh_servers', JSON.stringify(myServers));
+        alert("Gefeliciteerd! Je " + type + " server wordt nu gestart.");
+        show('dash');
+    }
+
+    function refresh() {
+        // Update Buttons & Lock message
+        const btn = document.getElementById('buy-btn');
+        const msg = document.getElementById('lock-msg');
+        const userTag = document.getElementById('user-display');
+
+        if(user) {
+            btn.disabled = false;
+            msg.style.display = 'none';
+            userTag.innerText = "Dashboard (" + user + ")";
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('welcome-msg').style.display = 'block';
+            document.getElementById('hi-name').innerText = "Hallo, " + user;
+        } else {
+            btn.disabled = true;
+            msg.style.display = 'block';
+        }
+
+        // Render Dashboard
+        const container = document.getElementById('server-container');
+        if(myServers.length > 0) {
+            container.innerHTML = myServers.map(s => `
+                <div class="server-item">
+                    <div>
+                        <strong>${s.type}</strong><br>
+                        <small style="color:#22c55e;">Status: Actief (ID: #${s.id})</small>
+                    </div>
+                    <button class="btn" style="width:auto; padding:5px 10px;" onclick="alert('Paneel opent...')">Open Console</button>
+                </div>
+            `).join('');
+        }
+    }
+
+    refresh();
+</script>
 
 </body>
 </html>
