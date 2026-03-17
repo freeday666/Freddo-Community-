@@ -1,147 +1,147 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mijn Game Hosting Platform</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #1e1e1e;
-    color: #ffffff;
-    margin: 0;
-    padding: 0;
-  }
-
-  header {
-    background-color: #282828;
-    padding: 20px;
-    text-align: center;
-  }
-
-  header h1 {
-    margin: 0;
-    font-size: 2.5em;
-    color: #00ffff;
-  }
-
-  nav {
-    margin-top: 10px;
-  }
-
-  nav a {
-    color: #ffffff;
-    text-decoration: none;
-    margin: 0 15px;
-    font-weight: bold;
-  }
-
-  nav a:hover {
-    color: #00ffff;
-  }
-
-  section {
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: auto;
-  }
-
-  h2 {
-    color: #00ffff;
-    margin-bottom: 20px;
-  }
-
-  .register, .login {
-    background-color: #333;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 400px;
-    margin: 20px auto;
-  }
-
-  input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    border: none;
-    border-radius: 4px;
-  }
-
-  button {
-    background-color: #00ffff;
-    color: #000;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  button:hover {
-    background-color: #00cccc;
-  }
-
-  footer {
-    background-color: #282828;
-    text-align: center;
-    padding: 20px;
-    margin-top: 40px;
-  }
-
-  /* Responsive design */
-  @media(max-width: 600px) {
-    header h1 {
-      font-size: 2em;
-    }
-  }
-</style>
+<meta charset="UTF-8">
+<title>FiveM Admin Panel</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <h1>Mijn Game Hosting Platform</h1>
-  <nav>
-    <a href="#home">Home</a>
-    <a href="#informatie">Informatie</a>
-    <a href="#contact">Contact</a>
-  </nav>
-</header>
-
-<section id="home">
-  <h2>Welkom!</h2>
-  <p>Welkom bij mijn eigen game hosting platform. Hier kun je je eigen games hosten en beheren. Log in of registreer hieronder om te beginnen.</p>
-  <div class="register">
-    <h3>Registreren</h3>
-    <form>
-      <input type="text" placeholder="Gebruikersnaam" required />
-      <input type="password" placeholder="Wachtwoord" required />
-      <button type="submit">Registreren</button>
-    </form>
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="login-box">
+    <h1>🔐 Admin Login</h1>
+    <input id="user" placeholder="Username">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="error"></p>
   </div>
-  <div class="login">
-    <h3>Inloggen</h3>
-    <form>
-      <input type="text" placeholder="Gebruikersnaam" required />
-      <input type="password" placeholder="Wachtwoord" required />
-      <button type="submit">Inloggen</button>
-    </form>
+</div>
+
+<!-- PANEL -->
+<div id="panel" style="display:none;">
+  <div class="sidebar">
+    <h2>🎮 FiveM Panel</h2>
+    <a href="#" onclick="showPage('dashboard')">Dashboard</a>
+    <a href="#" onclick="showPage('servers')">Servers</a>
+    <a href="#" onclick="showPage('players')">Players</a>
+    <a href="#" onclick="logout()">Logout</a>
   </div>
-</section>
 
-<section id="informatie">
-  <h2>Wat is dit platform?</h2>
-  <p>Dit is een voorbeeld van een game hosting platform gemaakt met HTML. In een echte situatie zou je hier backend-code toevoegen om servers te beheren, gebruikers te authenticeren en meer.</p>
-</section>
+  <div class="main">
+    <div id="dashboard" class="page">
+      <h1>📊 Dashboard</h1>
+      <div class="card">
+        <h3>Server Status</h3>
+        <p id="status">🟢 Loading...</p>
+      </div>
+      <div class="card">
+        <h3>Players Online</h3>
+        <p id="playerCount">0</p>
+      </div>
+    </div>
 
-<section id="contact">
-  <h2>Contact</h2>
-  <p>Heb je vragen? Neem contact met ons op via email: <a href="mailto:info@mijnplatform.nl">info@mijnplatform.nl</a></p>
-</section>
+    <div id="servers" class="page" style="display:none;">
+      <h1>🎮 Server Control</h1>
+      <div class="card">
+        <button onclick="startServer()">Start</button>
+        <button onclick="stopServer()">Stop</button>
+        <button onclick="restartServer()">Restart</button>
+      </div>
+    </div>
 
-<footer>
-  <p>&copy; 2024 Mijn Game Hosting Platform</p>
-</footer>
+    <div id="players" class="page" style="display:none;">
+      <h1>👥 Players</h1>
+      <div id="playerList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "http://localhost:3000"; // Vul hier je backend URL in (lokal of VPS)
+
+// NAVIGATION
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  document.getElementById(page).style.display='block';
+}
+
+// LOGIN
+function login(){
+  const user = document.getElementById("user").value;
+  const pass = document.getElementById("pass").value;
+  if(user==="admin" && pass==="admin"){
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("panel").style.display="block";
+    loadPlayers();
+    loadServerStatus();
+  } else {
+    document.getElementById("error").innerText="Wrong credentials!";
+  }
+}
+function logout(){ location.reload(); }
+
+// SERVER CONTROL
+async function startServer(){
+  const res = await fetch(API+"/server/start/1",{method:"POST"});
+  const data = await res.json();
+  document.getElementById("status").innerText="🟢 Online";
+  alert(data.message);
+}
+async function stopServer(){
+  const res = await fetch(API+"/server/stop/1",{method:"POST"});
+  const data = await res.json();
+  document.getElementById("status").innerText="🔴 Offline";
+  alert(data.message);
+}
+async function restartServer(){
+  const res = await fetch(API+"/server/restart/1",{method:"POST"});
+  const data = await res.json();
+  document.getElementById("status").innerText="🟡 Restarting";
+  setTimeout(()=>document.getElementById("status").innerText="🟢 Online",1500);
+}
+
+// PLAYERS
+async function loadPlayers(){
+  try{
+    const res = await fetch(API+"/players");
+    const players = await res.json();
+    const div = document.getElementById("playerList");
+    div.innerHTML="";
+    players.forEach(p=>{
+      const el = document.createElement("div");
+      el.className="card";
+      el.innerHTML=`${p.name} <button onclick="kick(${p.id})">Kick</button> <button onclick="ban(${p.id})">Ban</button>`;
+      div.appendChild(el);
+    });
+    document.getElementById("playerCount").innerText = players.length;
+  } catch(err){
+    console.error(err);
+    document.getElementById("playerCount").innerText="0";
+  }
+}
+async function kick(id){
+  const res = await fetch(API+"/kick/"+id,{method:"POST"});
+  const data = await res.json();
+  alert(data.message);
+  loadPlayers();
+}
+async function ban(id){
+  const res = await fetch(API+"/ban/"+id,{method:"POST"});
+  const data = await res.json();
+  alert(data.message);
+  loadPlayers();
+}
+
+// SERVER STATUS
+async function loadServerStatus(){
+  const res = await fetch(API+"/servers");
+  const servers = await res.json();
+  if(servers.length>0){
+    document.getElementById("status").innerText = servers[0].status;
+  }
+}
+</script>
 
 </body>
 </html>
