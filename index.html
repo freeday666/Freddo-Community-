@@ -3,145 +3,62 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>host2play.gratis - Localhost Test</title>
-<!-- Styles voor layout -->
+<title>Discord User ID Checker</title>
 <style>
-  body { margin:0; padding:0; font-family: Arial, sans-serif; background-color: #222; }
-  #loginPage, #mainContent { width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center; }
-  #loginPage { background-color: #f8f9fa; flex-direction: column; }
-  #mainContent { display: none; flex-direction: column; }
-  .card { background: #fff; padding: 20px; border-radius: 8px; max-width: 400px; width: 100%; }
-  .btn { padding: 10px 20px; margin-top: 10px; border: none; border-radius: 4px; cursor: pointer; }
-  .btn-primary { background-color: #007bff; color: #fff; }
-  .btn-secondary { background-color: #6c757d; color: #fff; }
-  nav { width: 100%; background-color: #000; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
-  nav a { color: #fff; margin: 0 10px; text-decoration: none; }
-  #logoutBtn { min-width: 160px; border-radius: 23px; }
+  body { font-family: Arial, sans-serif; background: #2c2f33; color: #fff; margin:0; padding:20px; }
+  #checker { max-width: 600px; margin: auto; padding:20px; background:#23272a; border-radius:8px; }
+  input { width: calc(100% - 20px); padding:10px; margin-bottom:10px; border:none; border-radius:4px; }
+  button { padding:10px 20px; border:none; border-radius:4px; background:#7289da; color:#fff; cursor:pointer; }
+  #result { margin-top:20px; background:#2c2f33; padding:10px; border-radius:8px; }
 </style>
 </head>
 <body>
 
-<!-- Login pagina -->
-<div id="loginPage">
-  <div class="card">
-    <h3 style="text-align:center;">Inloggen</h3>
-    <form id="loginForm">
-      <div>
-        <label>Gebruikersnaam</label>
-        <input type="text" id="username" required />
-      </div>
-      <div>
-        <label>Wachtwoord</label>
-        <input type="password" id="password" required />
-      </div>
-      <button class="btn btn-primary" type="submit">Inloggen</button>
-    </form>
-    <button class="btn btn-secondary" id="resetPasswordBtn">Wachtwoord vergeten?</button>
-  </div>
+<div id="checker">
+  <h2>Discord User ID Checker</h2>
+  <input type="text" id="discordId" placeholder="Voer Discord ID in" />
+  <button onclick="checkUser()">Check User</button>
+  
+  <div id="result"></div>
 </div>
 
-<!-- Hoofd inhoud, standaard verborgen -->
-<div id="mainContent">
-  <!-- Navigatiebalk -->
-  <nav>
-    <div>
-      <img src="https://host2play.pl/public/img/whitetxt.png" alt="host2play" height="45" />
-    </div>
-    <div style="display:flex; align-items:center;">
-      <a href="#offer">Home</a>
-      <a href="#contact">Contact</a>
-      <a href="#about">About Us</a>
-      <a href="#rules">Rules</a>
-      <a href="#faq">FAQ</a>
-      <a href="https://host2play.com/discord" target="_blank" style="color:#fff;">Discord</a>
-      <button id="logoutBtn" class="btn btn-primary" style="margin-left:10px;">Uitloggen</button>
-    </div>
-  </nav>
-
-  <!-- Header -->
-  <header style="background: rgba(0,0,0,0.65) url('https://host2play.pl/public/img/lp2.jpg') no-repeat center; background-size:cover; height:400px; display:flex; align-items:center; justify-content:center; color:#fff; flex-direction:column;">
-    <h1>Forge Your Digital World, Free Server Hosting for All</h1>
-    <a href="#offer" class="btn btn-primary" style="margin-top:20px;">Check offer</a>
-  </header>
-
-  <!-- Content -->
-  <section id="offer" style="padding:20px; background:#333; color:#fff;">
-    <h2>Free servers offer</h2>
-    <p>Hier komt de inhoud over het aanbod.</p>
-  </section>
-
-  <section id="contact" style="padding:20px; background:#eee; color:#000;">
-    <h2>Contact Us</h2>
-    <form id="contactForm">
-      <div>
-        <label>Naam</label>
-        <input type="text" id="name" required />
-      </div>
-      <div>
-        <label>Email</label>
-        <input type="email" id="email" required />
-      </div>
-      <div>
-        <label>Bericht</label>
-        <textarea id="message" rows="4" required></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary">Verstuur</button>
-    </form>
-  </section>
-
-  <!-- Footer -->
-  <footer style="background:#000; color:#999; padding:20px; text-align:center;">
-    <p>&copy; 2024 host2play - All rights reserved</p>
-    <p>Email: <a href="mailto:info@host2play.gratis" style="color:#0e4688;">info@host2play.gratis</a></p>
-  </footer>
-</div>
-
-<!-- Scripts -->
 <script>
-  // Check of ingelogd
-  if (localStorage.getItem('loggedIn') === 'true') {
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-  } else {
-    document.getElementById('loginPage').style.display = 'flex';
-    document.getElementById('mainContent').style.display = 'none';
+function checkUser() {
+  const userId = document.getElementById('discordId').value.trim();
+  if(!userId) {
+    alert('Voer een Discord ID in');
+    return;
   }
 
-  // Inloggen
-  document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const user = document.getElementById('username').value;
-    const pass = document.getElementById('password').value;
-    // Voor demo: vaste gebruikersnaam + wachtwoord
-    if (user === 'admin' && pass === 'password') {
-      localStorage.setItem('loggedIn', 'true');
-      document.getElementById('loginPage').style.display = 'none';
-      document.getElementById('mainContent').style.display = 'block';
+  // Hier moet je je backend API URL invullen
+  fetch('https://jouw-backend-api.com/getDiscordUser', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: userId })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.error) {
+      document.getElementById('result').innerHTML = `<p style="color:red;">${data.error}</p>`;
     } else {
-      alert('Onjuiste inloggegevens');
+      // Toon info
+      document.getElementById('result').innerHTML = `
+        <h3>Gebruiker Informatie</h3>
+        <p><strong>Naam:</strong> ${data.username}#${data.discriminator}</p>
+        <p><strong>ID:</strong> ${data.id}</p>
+        <p><strong>Bot:</strong> ${data.bot ? 'Ja' : 'Nee'}</p>
+        <p><strong>Avatar:</strong> <img src="${data.avatar_url}" width="50" /></p>
+        <!-- Voeg meer info toe zoals roles, status, etc. als beschikbaar -->
+      `;
     }
+  })
+  .catch(err => {
+    document.getElementById('result').innerHTML = `<p style="color:red;">Fout bij ophalen gegevens</p>`;
   });
-
-  // Uitloggen
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    if (confirm('Wil je echt uitloggen?')) {
-      localStorage.removeItem('loggedIn');
-      document.getElementById('loginPage').style.display = 'flex';
-      document.getElementById('mainContent').style.display = 'none';
-    }
-  });
-
-  // Wachtwoord vergeten
-  document.getElementById('resetPasswordBtn').addEventListener('click', () => {
-    alert('Gebruik wachtwoord: "password"');
-  });
-
-  // Contact formulier
-  document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Bericht verstuurd! Bedankt.');
-    this.reset();
-  });
+}
 </script>
+
 </body>
 </html>
