@@ -1,146 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-<meta charset="UTF-8">
-<title>FiveM Admin Panel</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Discord Bot Control Panel</title>
+<!-- Google Fonts voor een strakke uitstraling -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 50px 20px;
+    color: #333;
+  }
+  h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  }
+  .buttons {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  button {
+    background-color: #fff;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transition: background 0.3s, transform 0.2s;
+  }
+  button:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+  }
+  #status {
+    font-size: 1.4em;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  }
+  #responseBox {
+    margin-top: 30px;
+    padding: 20px;
+    max-width: 700px;
+    width: 100%;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    font-family: 'Roboto', sans-serif;
+  }
+  #response {
+    white-space: pre-wrap;
+    font-size: 1.1em;
+  }
+</style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="loginPage">
-  <div class="login-box">
-    <h1>🔐 Admin Login</h1>
-    <input id="user" placeholder="Username">
-    <input id="pass" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <p id="error"></p>
-  </div>
+<h1>Discord Bot Beheer</h1>
+
+<div class="buttons">
+  <button onclick="startBot()">Start Bot</button>
+  <button onclick="stopBot()">Stop Bot</button>
+  <button onclick="fetchStatus()">Haal Status op</button>
 </div>
 
-<!-- PANEL -->
-<div id="panel" style="display:none;">
-  <div class="sidebar">
-    <h2>🎮 FiveM Panel</h2>
-    <a href="#" onclick="showPage('dashboard')">Dashboard</a>
-    <a href="#" onclick="showPage('servers')">Servers</a>
-    <a href="#" onclick="showPage('players')">Players</a>
-    <a href="#" onclick="logout()">Logout</a>
-  </div>
+<div id="status">Status: Nog niet verbonden</div>
 
-  <div class="main">
-    <div id="dashboard" class="page">
-      <h1>📊 Dashboard</h1>
-      <div class="card">
-        <h3>Server Status</h3>
-        <p id="status">🟢 Loading...</p>
-      </div>
-      <div class="card">
-        <h3>Players Online</h3>
-        <p id="playerCount">0</p>
-      </div>
-    </div>
-
-    <div id="servers" class="page" style="display:none;">
-      <h1>🎮 Server Control</h1>
-      <div class="card">
-        <button onclick="startServer()">Start</button>
-        <button onclick="stopServer()">Stop</button>
-        <button onclick="restartServer()">Restart</button>
-      </div>
-    </div>
-
-    <div id="players" class="page" style="display:none;">
-      <h1>👥 Players</h1>
-      <div id="playerList"></div>
-    </div>
-  </div>
+<div id="responseBox">
+  <h2>API Reactie</h2>
+  <div id="response">Wacht op actie...</div>
 </div>
 
 <script>
-const API = "http://localhost:3000"; // Vul hier je backend URL in (lokal of VPS)
+  // Pas hier je API URL aan naar jouw hosting
+  const apiBaseUrl = 'https://freddohosting.onrender.com'; // JOUW API URL
 
-// NAVIGATION
-function showPage(page){
-  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
-  document.getElementById(page).style.display='block';
-}
-
-// LOGIN
-function login(){
-  const user = document.getElementById("user").value;
-  const pass = document.getElementById("pass").value;
-  if(user==="admin" && pass==="admin"){
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("panel").style.display="block";
-    loadPlayers();
-    loadServerStatus();
-  } else {
-    document.getElementById("error").innerText="Wrong credentials!";
+  async function startBot() {
+    updateStatus('Bezig met starten...');
+    const response = await fetch(`${apiBaseUrl}/start`);
+    const data = await response.json();
+    updateResponse(data.message || 'Bot gestart!');
+    fetchStatus();
   }
-}
-function logout(){ location.reload(); }
 
-// SERVER CONTROL
-async function startServer(){
-  const res = await fetch(API+"/server/start/1",{method:"POST"});
-  const data = await res.json();
-  document.getElementById("status").innerText="🟢 Online";
-  alert(data.message);
-}
-async function stopServer(){
-  const res = await fetch(API+"/server/stop/1",{method:"POST"});
-  const data = await res.json();
-  document.getElementById("status").innerText="🔴 Offline";
-  alert(data.message);
-}
-async function restartServer(){
-  const res = await fetch(API+"/server/restart/1",{method:"POST"});
-  const data = await res.json();
-  document.getElementById("status").innerText="🟡 Restarting";
-  setTimeout(()=>document.getElementById("status").innerText="🟢 Online",1500);
-}
-
-// PLAYERS
-async function loadPlayers(){
-  try{
-    const res = await fetch(API+"/players");
-    const players = await res.json();
-    const div = document.getElementById("playerList");
-    div.innerHTML="";
-    players.forEach(p=>{
-      const el = document.createElement("div");
-      el.className="card";
-      el.innerHTML=`${p.name} <button onclick="kick(${p.id})">Kick</button> <button onclick="ban(${p.id})">Ban</button>`;
-      div.appendChild(el);
-    });
-    document.getElementById("playerCount").innerText = players.length;
-  } catch(err){
-    console.error(err);
-    document.getElementById("playerCount").innerText="0";
+  async function stopBot() {
+    updateStatus('Bezig met stoppen...');
+    const response = await fetch(`${apiBaseUrl}/stop`);
+    const data = await response.json();
+    updateResponse(data.message || 'Bot gestopt!');
+    fetchStatus();
   }
-}
-async function kick(id){
-  const res = await fetch(API+"/kick/"+id,{method:"POST"});
-  const data = await res.json();
-  alert(data.message);
-  loadPlayers();
-}
-async function ban(id){
-  const res = await fetch(API+"/ban/"+id,{method:"POST"});
-  const data = await res.json();
-  alert(data.message);
-  loadPlayers();
-}
 
-// SERVER STATUS
-async function loadServerStatus(){
-  const res = await fetch(API+"/servers");
-  const servers = await res.json();
-  if(servers.length>0){
-    document.getElementById("status").innerText = servers[0].status;
+  async function fetchStatus() {
+    updateStatus('Status wordt opgehaald...');
+    const response = await fetch(`${apiBaseUrl}/status`);
+    const data = await response.json();
+    updateStatus(data.status || 'Onbekend');
   }
-}
+
+  function updateStatus(text) {
+    document.getElementById('status').innerText = 'Status: ' + text;
+  }
+
+  function updateResponse(text) {
+    document.getElementById('response').innerText = text;
+  }
 </script>
 
 </body>
