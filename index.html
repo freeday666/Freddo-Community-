@@ -1,80 +1,33 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Freddo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>FiveM Admin Panel - Login</title>
     <style>
-        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        body { font-family: sans-serif; background: #2c3e50; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .login-card { background: #34495e; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        input { display: block; width: 100%; margin: 10px 0; padding: 10px; border-radius: 4px; border: none; }
+        button { width: 100%; padding: 10px; background: #e74c3c; color: white; border: none; cursor: pointer; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-
-    <div id="login-box" class="glass p-8 rounded-2xl shadow-2xl w-96 text-center">
-        <h2 class="text-3xl font-bold mb-6 text-blue-400">Freddo Admin</h2>
-        <input type="text" id="username" placeholder="Gebruikersnaam" class="w-full mb-4 p-3 rounded bg-slate-800 border border-slate-700 focus:outline-none focus:border-blue-500">
-        <input type="password" id="password" placeholder="Wachtwoord" class="w-full mb-6 p-3 rounded bg-slate-800 border border-slate-700 focus:outline-none focus:border-blue-500">
-        <button onclick="checkLogin()" class="w-full bg-blue-600 hover:bg-blue-500 transition p-3 rounded-lg font-bold">Inloggen</button>
-        <p id="error-msg" class="text-red-500 mt-4 hidden">Onjuiste gegevens!</p>
-    </div>
-
-    <div id="dashboard" class="hidden w-full max-w-4xl p-6">
-        <div class="glass p-8 rounded-2xl">
-            <h1 class="text-2xl font-bold mb-6 border-b border-slate-700 pb-4">Systeem Overzicht</h1>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="p-4 bg-slate-800 rounded-lg">
-                    <h3 class="text-blue-400 font-semibold mb-2">User Info</h3>
-                    <p>ID: <span id="user-id" class="text-green-400">#88219</span></p>
-                    <p>IP-Adres: <span id="ip-address" class="text-yellow-400">Laden...</span></p>
-                </div>
-                
-                <div class="p-4 bg-slate-800 rounded-lg">
-                    <h3 class="text-red-400 font-semibold mb-2">Anti-Cheat Status</h3>
-                    <p id="cheat-status" class="text-green-500">Geen hacks gedetecteerd</p>
-                </div>
-            </div>
-            
-            <button onclick="location.reload()" class="mt-8 text-sm text-slate-400 hover:text-white">Uitloggen</button>
-        </div>
+<body>
+    <div class="login-card">
+        <h2>Admin Login</h2>
+        <input type="text" id="user" placeholder="Gebruikersnaam">
+        <input type="password" id="pass" placeholder="Wachtwoord">
+        <button onclick="checkLogin()">Inloggen</button>
     </div>
 
     <script>
-        // Simpele login check (Let op: niet veilig voor echte gevoelige data!)
         function checkLogin() {
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-
-            if(user === "freddo" && pass === "administratie") {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
-                loadUserData();
+            const user = document.getElementById('user').value;
+            const pass = document.getElementById('pass').value;
+            if(user === "freddo" && pass === "admin") {
+                alert("Welkom Freddo!");
+                // Hier zou je doorsturen naar het paneel
             } else {
-                document.getElementById('error-msg').classList.remove('hidden');
+                alert("Foutieve gegevens!");
             }
         }
-
-        // Haal IP adres op
-        async function loadUserData() {
-            try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                document.getElementById('ip-address').innerText = data.ip;
-            } catch (err) {
-                document.getElementById('ip-address').innerText = "Kon IP niet laden";
-            }
-        }
-
-        // Basis "Cheat" detectie (kijkt of de console open staat)
-        setInterval(() => {
-            const threshold = 160;
-            if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
-                document.getElementById('cheat-status').innerText = "HACKING TOOLS GEDETECTEERD (Console Open)";
-                document.getElementById('cheat-status').className = "text-red-500 font-bold animate-pulse";
-            }
-        }, 1000);
     </script>
 </body>
 </html>
