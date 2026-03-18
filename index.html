@@ -7,92 +7,164 @@
 <!-- Google Fonts voor een modern lettertype -->
 <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
 <style>
-  body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background-color: #121212;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-  }
-  #login-section, #community-section {
-    width: 90%;
-    max-width: 400px;
-    padding: 20px;
-    background: #1e1e1e;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-  }
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-  input[type="text"], input[type="password"] {
-    padding: 12px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 8px;
-    background-color: #333;
-    color: #fff;
-  }
-  button {
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background-color: #4A90E2;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  button:hover {
-    background-color: #357ABD;
-  }
-  #community-section {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-  }
-  #community-title {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  /* Discord knop styling */
-  .discord-btn {
-    display: flex;
-    align-items: center;
-    background-color: #5865F2;
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: bold;
-    font-family: 'Inter', sans-serif;
-    transition: background-color 0.3s;
-  }
-  .discord-btn:hover {
-    background-color: #4752C4;
-  }
-  .discord-logo {
-    width: 24px;
-    height: 24px;
-    margin-right: 12px;
-  }
-  /* Uitloggen knop */
-  #logout-btn {
-    margin-top: 20px;
-    background-color: #e04848;
-  }
-  #logout-btn:hover {
-    background-color: #b03a3a;
-  }
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #fff;
+  overflow: hidden;
+  transition: background 1s ease;
+}
+
+/* Achtergrond animatie */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.1&auto=format&fit=crop&w=1950&q=80') no-repeat center/cover;
+  opacity: 0.2;
+  z-index: -1;
+  animation: floatBackground 30s infinite alternate ease-in-out;
+}
+
+@keyframes floatBackground {
+  0% { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.05) translateY(-10px); }
+}
+
+/* Algemene styling voor containers */
+#login-section, #community-section {
+  width: 90%;
+  max-width: 400px;
+  padding: 30px;
+  background: rgba(30, 30, 30, 0.8);
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  margin: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: #fff;
+  animation: fadeInDown 1s ease;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input[type="text"], input[type="password"] {
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background-color: rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: background 0.3s, transform 0.2s;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+  background-color: rgba(255,255,255,0.3);
+  transform: scale(1.02);
+}
+
+button {
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background-color: #4A90E2;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #357ABD;
+  transform: scale(1.02);
+}
+
+/* Community pagina styles */
+#community-section {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#community-title {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #fff;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Discord knop stijl */
+.discord-btn {
+  display: flex;
+  align-items: center;
+  background-color: #5865F2;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.discord-btn:hover {
+  background-color: #4752C4;
+  transform: scale(1.02);
+}
+
+.discord-logo {
+  width: 28px;
+  height: 28px;
+  margin-right: 15px;
+  filter: brightness(0) invert(1);
+}
+
+/* Uitloggen knop */
+#logout-btn {
+  margin-top: 20px;
+  background-color: #e04848;
+}
+
+#logout-btn:hover {
+  background-color: #b03a3a;
+}
+
 </style>
 </head>
 <body>
@@ -112,7 +184,7 @@
   <h2 id="community-title">Freddo Community</h2>
   <a class="discord-btn" href="https://discord.gg/DVaVupy5CK" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Discord_logo.svg" class="discord-logo" alt="Discord" />
-    Join onze Discord
+    Word lid op Discord
   </a>
   <button id="logout-btn">Uitloggen</button>
 </div>
@@ -133,8 +205,8 @@
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    // In dit voorbeeld: hardcoded login
-    if (username === 'user' && password === 'community123') {
+    // Hardcoded login (pas aan naar wens)
+    if (username === 'freddo' && password === 'community123') {
       localStorage.setItem('user', username);
       loginSection.style.display = 'none';
       communitySection.style.display = 'flex';
