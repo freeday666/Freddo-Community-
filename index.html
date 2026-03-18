@@ -2,254 +2,49 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Freddo Community</title>
-<!-- Google Fonts voor een modern lettertype -->
-<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
-<style>
-/* Reset en basisstijl */
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
-  background-attachment: fixed;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  color: #fff;
-  overflow: hidden;
-  transition: background 1s ease;
-}
-
-/* Achtergrond animatie met afbeelding en beweging */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.1&auto=format&fit=crop&w=1950&q=80') no-repeat center/cover;
-  opacity: 0.2;
-  z-index: -1;
-  animation: floatBackground 30s infinite alternate ease-in-out;
-}
-
-@keyframes floatBackground {
-  0% { transform: scale(1) translateY(0); }
-  100% { transform: scale(1.05) translateY(-10px); }
-}
-
-/* Container styling */
-#login-section, #community-section {
-  width: 90%;
-  max-width: 500px;
-  padding: 30px;
-  background: rgba(30, 30, 30, 0.8);
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  backdrop-filter: blur(8px);
-  margin: 20px;
-  animation: fadeIn 1s ease;
-}
-
-/* Titelstijl */
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 2.2rem;
-  letter-spacing: 2px;
-  color: #fff;
-  animation: fadeInDown 1s ease;
-}
-
-/* Animaties */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Form styling */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-input[type="text"], input[type="password"] {
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  background-color: rgba(255,255,255,0.2);
-  color: #fff;
-  font-size: 1rem;
-  outline: none;
-  transition: background 0.3s, transform 0.2s;
-}
-
-input[type="text"]:focus, input[type="password"]:focus {
-  background-color: rgba(255,255,255,0.3);
-  transform: scale(1.02);
-}
-
-/* Knoppen stijl */
-button {
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  background-color: #4A90E2;
-  color: #fff;
-  font-size: 1.1rem;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s, transform 0.2s;
-}
-
-button:hover {
-  background-color: #357ABD;
-  transform: scale(1.02);
-}
-
-/* Community sectie styling */
-#community-section {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  animation: fadeIn 1s forwards;
-}
-
-/* Titel van community */
-#community-title {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  color: #fff;
-  letter-spacing: 2px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-/* Discord knop */
-.discord-btn {
-  display: flex;
-  align-items: center;
-  background-color: #5865F2;
-  color: #fff;
-  padding: 14px 24px;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: bold;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.2rem;
-  margin-bottom: 30px;
-  transition: background 0.3s, transform 0.2s;
-}
-
-.discord-btn:hover {
-  background-color: #4752C4;
-  transform: scale(1.02);
-}
-
-.discord-logo {
-  width: 28px;
-  height: 28px;
-  margin-right: 15px;
-  filter: brightness(0) invert(1);
-}
-
-/* Kanaal ID sectie voor contact */
-#channel-id {
-  background: rgba(255,255,255,0.1);
-  padding: 20px;
-  border-radius: 15px;
-  margin: 20px 0;
-  text-align: center;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.4rem;
-  letter-spacing: 1px;
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-#channel-id:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-
-/* Uitloggen knop */
-#logout-btn {
-  margin-top: 20px;
-  background-color: #e04848;
-}
-
-#logout-btn:hover {
-  background-color: #b03a3a;
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contactformulier</title>
 </head>
 <body>
-
-<!-- Inlogformulier -->
-<div id="login-section">
-  <h2>Inloggen bij Freddo Community</h2>
-  <form id="login-form">
-    <input type="text" id="username" placeholder="Gebruikersnaam" required />
-    <input type="password" id="password" placeholder="Wachtwoord" required />
-    <button type="submit">Inloggen</button>
-  </form>
-</div>
-
-<!-- Community pagina na inloggen -->
-<div id="community-section">
-  <h2 id="community-title">Freddo Community</h2>
-  <a class="discord-btn" href="https://discord.gg/DVaVupy5CK" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Discord_logo.svg" class="discord-logo" alt="Discord" />
-    Word lid op Discord
-  </a>
-  <!-- Kanaal ID contact info -->
-  <div id="channel-id">
-    <strong>Contact Kanaal ID:</strong> 1483138046571581440
-  </div>
-  <button id="logout-btn">Uitloggen</button>
-</div>
+<h1>Contactformulier</h1>
+<form id="contactForm">
+    <label for="naam">Naam:</label><br>
+    <input type="text" id="naam" name="naam" required><br><br>
+    
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+    
+    <label for="bericht">Bericht:</label><br>
+    <textarea id="bericht" name="bericht" rows="5" required></textarea><br><br>
+    
+    <button type="submit">Verstuur</button>
+</form>
 
 <script>
-  // Controle of gebruiker al ingelogd is
-  const storedUser = localStorage.getItem('user');
-  const loginSection = document.getElementById('login-section');
-  const communitySection = document.getElementById('community-section');
-
-  if (storedUser) {
-    loginSection.style.display = 'none';
-    communitySection.style.display = 'flex';
-  }
-
-  // Inloggen
-  document.getElementById('login-form').addEventListener('submit', function(e) {
+document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
 
-    // Pas aan naar je eigen login
-    if (username === 'freddo' && password === 'community123') {
-      localStorage.setItem('user', username);
-      loginSection.style.display = 'none';
-      communitySection.style.display = 'flex';
-    } else {
-      alert('Onjuiste gebruikersnaam of wachtwoord');
-    }
-  });
+    const naam = document.getElementById('naam').value;
+    const email = document.getElementById('email').value;
+    const bericht = document.getElementById('bericht').value;
 
-  // Uitloggen
-  document.getElementById('logout-btn').addEventListener('click', function() {
-    localStorage.removeItem('user');
-    loginSection.style.display = 'block';
-    communitySection.style.display = 'none';
-  });
+    fetch('/send', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ naam, email, bericht })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === 'success') {
+            alert('Bericht succesvol verzonden!');
+            document.getElementById('contactForm').reset();
+        } else {
+            alert('Er ging iets fout: ' + data.status);
+        }
+    });
+});
 </script>
-
 </body>
 </html>
