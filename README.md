@@ -7,7 +7,9 @@
 <p align="center">
   <img src="https://img.shields.io/badge/FREDDO-ONLINE-00ff99?style=for-the-badge"/>
   <img src="https://img.shields.io/badge/COMMUNITY-ACTIVE-00eaff?style=for-the-badge"/>
-  <img https://discord.gg/DVaVupy5CK src="https://img.shields.io/badge/VIBE-ELITE-ff00ff?style=for-the-badge"/>
+  <a href="https://discord.gg/DVaVupy5CK" target="_blank">
+    <img src="https://img.shields.io/discord/1060195063075999824?label=VIBE-ELITE&style=for-the-badge&color=ff00ff"/>
+  </a>
 </p>
 
 ---
