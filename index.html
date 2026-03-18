@@ -1,70 +1,57 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Bot Panel</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome voor icoontjes -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <title>Discord Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .panel {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      width: 350px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .start { background: #22c55e; }
+    .stop { background: #ef4444; }
+    .status { margin-top: 10px; }
+  </style>
 </head>
 <body>
-
-    <div class="sidebar">
-        <h2><i class="fab fa-discord"></i> Bot Panel</h2>
-        <ul>
-            <li class="active"><i class="fas fa-home"></i> Dashboard</li>
-            <li><i class="fas fa-server"></i> Servers</li>
-            <li><i class="fas fa-cog"></i> Instellingen</li>
-        </ul>
+  <div class="panel">
+    <h2>Discord Panel</h2>
+    <input type="password" id="token" placeholder="Plak je token hier">
+    
+    <div>
+      <button class="start" onclick="startBot()">Start</button>
+      <button class="stop" onclick="stopBot()">Stop</button>
     </div>
 
-    <div class="main-content">
-        <header>
-            <h1>Bot Status Overzicht</h1>
-            <div class="user-info">
-                <span id="bot-tag">Laden...</span>
-                <div class="status-dot" id="status-indicator"></div>
-            </div>
-        </header>
+    <div class="status" id="status">Status: Offline</div>
+  </div>
 
-        <div class="stats-container">
-            <div class="stat-card">
-                <i class="fas fa-network-wired"></i>
-                <div class="info">
-                    <h3>Status</h3>
-                    <p id="bot-status">Offline</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-users"></i>
-                <div class="info">
-                    <h3>Servers</h3>
-                    <p id="server-count">0</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-bolt"></i>
-                <div class="info">
-                    <h3>Ping</h3>
-                    <p id="bot-ping">0ms</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="control-panel">
-            <h2>Bediening</h2>
-            <div class="button-group">
-                <button class="btn btn-restart" onclick="sendCommand('restart')">
-                    <i class="fas fa-redo"></i> Herstart Bot
-                </button>
-                <button class="btn btn-stop" onclick="sendCommand('stop')">
-                    <i class="fas fa-power-off"></i> Stop Bot
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
