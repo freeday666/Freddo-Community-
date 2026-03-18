@@ -3,151 +3,80 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Freddo Community</title>
+    <title>Inloggen</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #f4f4f4;
+            margin: 50px;
         }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 15px;
-            text-align: center;
+        #welcome {
+            display: none;
         }
-        nav {
-            background-color: #444;
-            display: flex;
-            justify-content: center;
-        }
-        nav a {
-            color: #fff;
-            padding: 14px 20px;
-            text-decoration: none;
-        }
-        nav a:hover {
-            background-color: #555;
-        }
-        main {
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-        }
-        section {
-            margin-bottom: 40px;
-        }
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-        /* Extra styling voor formulieren en secties */
         form {
-            display: flex;
-            flex-direction: column;
+            max-width: 300px;
+            margin-bottom: 20px;
         }
-        input[type="text"], input[type="password"], textarea {
-            padding: 10px;
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
             margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            box-sizing: border-box;
         }
         button {
-            padding: 10px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #555;
+            padding: 8px 16px;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Freddo Community</h1>
-    <p>Welkom bij onze community!</p>
-</header>
+<h2>Inloggen</h2>
+<div id="login-form">
+    <form id="form">
+        <label for="username">Gebruikersnaam:</label><br>
+        <input type="text" id="username" required><br>
+        <label for="password">Wachtwoord:</label><br>
+        <input type="password" id="password" required><br>
+        <button type="submit">Inloggen</button>
+    </form>
+</div>
 
-<nav>
-    <a href="#home">Home</a>
-    <a href="#nieuws">Nieuws</a>
-    <a href="#forum">Forum</a>
-    <a href="#leden">Leden</a>
-    <a href="#contact">Contact</a>
-</nav>
+<div id="welcome">
+    <h2>Welkom, <span id="user"></span>!</h2>
+    <button id="logout">Uitloggen</button>
+</div>
 
-<main>
-    <!-- Home Sectie -->
-    <section id="home">
-        <h2>Welkom bij de Freddo Community</h2>
-        <p>De plek voor fans en leden van Freddo. Deel je ideeën, lees het laatste nieuws en ontmoet andere leden!</p>
-    </section>
+<script>
+    // Check of gebruiker al ingelogd is
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('welcome').style.display = 'block';
+        document.getElementById('user').textContent = storedUser;
+    }
 
-    <!-- Nieuws Sectie -->
-    <section id="nieuws">
-        <h2>Laatste Nieuws</h2>
-        <ul>
-            <li><strong>01-01-2024:</strong> Nieuwe forumfunctie beschikbaar!</li>
-            <li><strong>15-12-2023:</strong> Freddo Community feest binnenkort.</li>
-            <li><strong>01-11-2023:</strong> Lid worden? Registreer je nu!</li>
-        </ul>
-    </section>
+    document.getElementById('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
-    <!-- Forum Sectie -->
-    <section id="forum">
-        <h2>Forum</h2>
-        <p>Hier kunnen leden discussiëren over Freddo.</p>
-        <ul>
-            <li><a href="#">Algemene Discussie</a></li>
-            <li><a href="#">Nieuwe Ideeën</a></li>
-            <li><a href="#">Technische Problemen</a></li>
-        </ul>
-    </section>
+        // Voor demo: controleer op vaste gebruikersnaam/wachtwoord
+        if (username === 'test' && password === 'test123') {
+            localStorage.setItem('user', username);
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('welcome').style.display = 'block';
+            document.getElementById('user').textContent = username;
+        } else {
+            alert('Onjuiste gebruikersnaam of wachtwoord');
+        }
+    });
 
-    <!-- Leden Registratie/Login -->
-    <section id="leden">
-        <h2>Leden Login / Registratie</h2>
-        <h3>Login</h3>
-        <form>
-            <input type="text" placeholder="Gebruikersnaam" required />
-            <input type="password" placeholder="Wachtwoord" required />
-            <button type="submit">Inloggen</button>
-        </form>
-        <h3>Registratie</h3>
-        <form>
-            <input type="text" placeholder="Gebruikersnaam" required />
-            <input type="email" placeholder="E-mail" required />
-            <input type="password" placeholder="Wachtwoord" required />
-            <button type="submit">Registreer</button>
-        </form>
-    </section>
-
-    <!-- Contactpagina -->
-    <section id="contact">
-        <h2>Contact</h2>
-        <p>Stuur ons een bericht:</p>
-        <form>
-            <input type="text" placeholder="Naam" required />
-            <input type="email" placeholder="E-mail" required />
-            <textarea rows="4" placeholder="Bericht" required></textarea>
-            <button type="submit">Verzend</button>
-        </form>
-    </section>
-</main>
-
-<footer>
-    <p>&copy; 2024 Freddo Community. Alle rechten voorbehouden.</p>
-</footer>
+    document.getElementById('logout').addEventListener('click', function() {
+        localStorage.removeItem('user');
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('welcome').style.display = 'none';
+        document.getElementById('form').reset();
+    });
+</script>
 
 </body>
 </html>
