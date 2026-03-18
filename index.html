@@ -1,59 +1,153 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <title>Host2Play.gratis</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Freddo Community</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
-            padding: 0;
+            background-color: #f4f4f4;
         }
         header {
             background-color: #333;
-            color: white;
-            padding: 20px;
+            color: #fff;
+            padding: 15px;
             text-align: center;
         }
         nav {
-            margin-top: 10px;
+            background-color: #444;
+            display: flex;
+            justify-content: center;
         }
         nav a {
-            color: white;
-            margin: 0 15px;
+            color: #fff;
+            padding: 14px 20px;
             text-decoration: none;
-            font-weight: bold;
+        }
+        nav a:hover {
+            background-color: #555;
         }
         main {
+            max-width: 1000px;
+            margin: 20px auto;
             padding: 20px;
+            background-color: #fff;
+        }
+        section {
+            margin-bottom: 40px;
         }
         footer {
             background-color: #333;
-            color: white;
+            color: #fff;
             text-align: center;
             padding: 10px;
             position: fixed;
             width: 100%;
             bottom: 0;
         }
+        /* Extra styling voor formulieren en secties */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"], input[type="password"], textarea {
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Host2Play.gratis</h1>
-        <nav>
-            <a href="#">Αρχική</a>
-            <a href="#">Υπηρεσίες</a>
-            <a href="#">Επικοινωνία</a>
-        </nav>
-    </header>
-    <main>
-        <h2>Καλώς ήρθατε στην πλατφόρμα Host2Play</h2>
-        <p>Προσφέρουμε δωρεάν φιλοξενία και υπηρεσίες gaming.</p>
-    </main>
-    <footer>
-        &copy; 2024 Host2Play.gratis. Όλα τα δικαιώματα διατηρούνται.
-    </footer>
+
+<header>
+    <h1>Freddo Community</h1>
+    <p>Welkom bij onze community!</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#nieuws">Nieuws</a>
+    <a href="#forum">Forum</a>
+    <a href="#leden">Leden</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<main>
+    <!-- Home Sectie -->
+    <section id="home">
+        <h2>Welkom bij de Freddo Community</h2>
+        <p>De plek voor fans en leden van Freddo. Deel je ideeën, lees het laatste nieuws en ontmoet andere leden!</p>
+    </section>
+
+    <!-- Nieuws Sectie -->
+    <section id="nieuws">
+        <h2>Laatste Nieuws</h2>
+        <ul>
+            <li><strong>01-01-2024:</strong> Nieuwe forumfunctie beschikbaar!</li>
+            <li><strong>15-12-2023:</strong> Freddo Community feest binnenkort.</li>
+            <li><strong>01-11-2023:</strong> Lid worden? Registreer je nu!</li>
+        </ul>
+    </section>
+
+    <!-- Forum Sectie -->
+    <section id="forum">
+        <h2>Forum</h2>
+        <p>Hier kunnen leden discussiëren over Freddo.</p>
+        <ul>
+            <li><a href="#">Algemene Discussie</a></li>
+            <li><a href="#">Nieuwe Ideeën</a></li>
+            <li><a href="#">Technische Problemen</a></li>
+        </ul>
+    </section>
+
+    <!-- Leden Registratie/Login -->
+    <section id="leden">
+        <h2>Leden Login / Registratie</h2>
+        <h3>Login</h3>
+        <form>
+            <input type="text" placeholder="Gebruikersnaam" required />
+            <input type="password" placeholder="Wachtwoord" required />
+            <button type="submit">Inloggen</button>
+        </form>
+        <h3>Registratie</h3>
+        <form>
+            <input type="text" placeholder="Gebruikersnaam" required />
+            <input type="email" placeholder="E-mail" required />
+            <input type="password" placeholder="Wachtwoord" required />
+            <button type="submit">Registreer</button>
+        </form>
+    </section>
+
+    <!-- Contactpagina -->
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>Stuur ons een bericht:</p>
+        <form>
+            <input type="text" placeholder="Naam" required />
+            <input type="email" placeholder="E-mail" required />
+            <textarea rows="4" placeholder="Bericht" required></textarea>
+            <button type="submit">Verzend</button>
+        </form>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Freddo Community. Alle rechten voorbehouden.</p>
+</footer>
+
 </body>
 </html>
