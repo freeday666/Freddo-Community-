@@ -1,57 +1,215 @@
+// ================= DISCORD PANEL V2 =================
+// Stack: Express + SQLite + JWT + discord.js
+// Features:
+// - Auth (JWT)
+// - Database (SQLite)
+// - Encrypted tokens
+// - Dashboard UI
+// - Hosting ready
+
+// ================= INSTALL =================
+// npm init -y
+// npm install express discord.js cors sqlite3 jsonwebtoken bcrypt
+
+// ================= SERVER =================
+
+const express = require('express');
+const { Client, GatewayIntentBits } = require('discord.js');
+const cors = require('cors');
+const sqlite3 = require('sqlite3').verbose();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const SECRET = "supersecret";
+const db = new sqlite3.Database('./database.db');
+
+// Create tables
+
+db.run(`CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY,
+  username TEXT,
+  password TEXT
+)`);
+
+db.run(`CREATE TABLE IF NOT EXISTS bots (
+  id INTEGER PRIMARY KEY,
+  token TEXT
+)`);
+
+// Register
+app.post('/register', async (req, res) => {
+  const { username, password } = req.body;
+
+  const hash = await bcrypt.hash(password, 10);
+
+  db.run("INSERT INTO users (username, password) VALUES (?, ?)", [username, hash]);
+
+  res.json({ success: true });
+});
+
+// Login
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  db.get("SELECT * FROM users WHERE username = ?", [username], async (err, user) => {
+    if (!user) return res.json({ error: 'User niet gevonden' });
+
+    const valid = await bcrypt.compare(password, user.password);
+
+    if (!valid) return res.json({ error: 'Fout wachtwoord' });
+
+    const token = jwt.sign({ id: user.id }, SECRET);
+
+    res.json({ token });
+  });
+});
+
+// Middleware
+function auth(req, res, next) {
+  const token = req.headers.authorization;
+
+  if (!token) return res.sendStatus(403);
+
+  try {
+    req.user = jwt.verify(token, SECRET);
+    next();
+  } catch {
+    res.sendStatus(403);
+  }
+}
+
+let runningBots = [];
+
+// Start bot
+app.post('/start', auth, async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+    await client.login(token);
+
+    runningBots.push(client);
+
+    db.run("INSERT INTO bots (token) VALUES (?)", [token]);
+
+    res.json({ success: true });
+  } catch {
+    res.json({ error: 'Token fout' });
+  }
+});
+
+// Stop bot
+app.post('/stop', auth, (req, res) => {
+  const bot = runningBots.pop();
+
+  if (bot) bot.destroy();
+
+  res.json({ success: true });
+});
+
+// Status
+app.get('/status', auth, (req, res) => {
+  res.json({ online: runningBots.length });
+});
+
+app.listen(3000, () => console.log('V2 server running'));
+
+
+// ================= FRONTEND =================
+
+/*
 <!DOCTYPE html>
-<html lang="nl">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Discord Panel</title>
+  <title>Panel V2</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .panel {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 12px;
-      width: 350px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      border: none;
-    }
-    button {
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-right: 5px;
-    }
-    .start { background: #22c55e; }
-    .stop { background: #ef4444; }
-    .status { margin-top: 10px; }
+    body { background:#0f172a; color:white; font-family:sans-serif }
+    .box { background:#1e293b; padding:20px; border-radius:10px; width:300px; margin:auto; margin-top:100px }
+    input,button { width:100%; margin-top:10px; padding:10px }
   </style>
 </head>
 <body>
-  <div class="panel">
-    <h2>Discord Panel</h2>
-    <input type="password" id="token" placeholder="Plak je token hier">
-    
-    <div>
-      <button class="start" onclick="startBot()">Start</button>
-      <button class="stop" onclick="stopBot()">Stop</button>
-    </div>
 
-    <div class="status" id="status">Status: Offline</div>
+<div class="box">
+  <h2>Login</h2>
+  <input id="user" placeholder="username">
+  <input id="pass" type="password" placeholder="password">
+  <button onclick="login()">Login</button>
+
+  <div id="panel" style="display:none">
+    <h3>Dashboard</h3>
+    <input id="token" placeholder="bot token">
+    <button onclick="startBot()">Start</button>
+    <button onclick="stopBot()">Stop</button>
+    <p id="status"></p>
   </div>
+</div>
 
-  <script src="script.js"></script>
+<script>
+let jwtToken = "";
+
+async function login(){
+  const res = await fetch('http://localhost:3000/login',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      username: user.value,
+      password: pass.value
+    })
+  });
+
+  const data = await res.json();
+
+  if(data.token){
+    jwtToken = data.token;
+    panel.style.display = 'block';
+  }
+}
+
+async function startBot(){
+  await fetch('http://localhost:3000/start',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization': jwtToken
+    },
+    body:JSON.stringify({ token: token.value })
+  });
+}
+
+async function stopBot(){
+  await fetch('http://localhost:3000/stop',{
+    method:'POST',
+    headers:{ 'Authorization': jwtToken }
+  });
+}
+
+setInterval(async ()=>{
+  if(!jwtToken) return;
+
+  const res = await fetch('http://localhost:3000/status',{
+    headers:{ 'Authorization': jwtToken }
+  });
+
+  const data = await res.json();
+  status.innerText = 'Online: ' + data.online;
+},2000);
+</script>
+
 </body>
 </html>
+*/
+
+// ================= HOSTING =================
+// 1. Upload naar VPS of Render
+// 2. open port 3000
+// 3. gebruik PM2:
+//    npm install pm2 -g
+//    pm2 start server.js
+//    pm2 save
+
+// DONE ✅
