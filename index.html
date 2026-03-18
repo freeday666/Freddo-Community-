@@ -1,100 +1,111 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Contactformulier</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background-color: #f2f2f2;
-  }
-  h1 {
-    color: #333;
-  }
-  form {
-    background-color: #fff;
-    padding: 20px;
-    max-width: 500px;
-    margin: auto;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-  label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-  }
-  input[type="text"],
-  input[type="email"],
-  textarea {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #45a049;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Project Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #7289da;
+            --secondary: #2ecc71;
+            --dark: #23272a;
+            --card: #2c2f33;
+            --text: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 { margin-bottom: 30px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            transition: opacity 0.3s;
+        }
+
+        .btn-discord { background-color: var(--primary); }
+        .btn-fivem { background-color: #ff4757; }
+        .btn-node { background-color: var(--secondary); }
+
+        .status {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 
-<h1>Contactformulier</h1>
-<form id="contactForm">
-    <label for="naam">Naam:</label>
-    <input type="text" id="naam" name="naam" required>
+    <div class="container">
+        <h1>🚀 Project Beheer</h1>
+        
+        <div class="grid">
+            <!-- Discord Bot Card -->
+            <div class="card">
+                <i class="fab fa-discord fa-3x" style="color: var(--primary);"></i>
+                <h3>Discord Bot (Node.js)</h3>
+                <p>Beheer je bot via het paneel.</p>
+                <a href="https://panel.bot-hosting.net" target="_blank" class="btn btn-node">Open Node Paneel</a>
+                <div class="status">Status: <span style="color:var(--secondary)">Online</span></div>
+            </div>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
+            <!-- FiveM Server Card -->
+            <div class="card">
+                <i class="fas fa-car fa-3x" style="color: #ff4757;"></i>
+                <h3>FiveM Server</h3>
+                <p>Connect direct naar de server.</p>
+                <a href="fivem://connect/JOUW_IP_HIER" class="btn btn-fivem">Start FiveM</a>
+                <div class="status">IP: play.jouwserver.nl</div>
+            </div>
 
-    <label for="bericht">Bericht:</label>
-    <textarea id="bericht" name="bericht" rows="5" required></textarea>
-
-    <button type="submit">Verstuur</button>
-</form>
-
-<script>
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const naam = document.getElementById('naam').value;
-    const email = document.getElementById('email').value;
-    const bericht = document.getElementById('bericht').value;
-
-    fetch('/send', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ naam, email, bericht })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if(data.status === 'success') {
-            alert('Bericht succesvol verzonden!');
-            document.getElementById('contactForm').reset();
-        } else {
-            alert('Er ging iets fout: ' + data.status);
-        }
-    })
-    .catch(error => {
-        alert('Er is een fout opgetreden: ' + error.message);
-    });
-});
-</script>
+            <!-- GitHub Code Card -->
+            <div class="card">
+                <i class="fab fa-github fa-3x"></i>
+                <h3>Code & Hosting</h3>
+                <p>Bekijk je HTML bestanden.</p>
+                <a href="https://github.com/" target="_blank" class="btn btn-discord" style="background: #444;">Naar GitHub</a>
+                <div class="status">Gehost via GitHub Pages</div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
