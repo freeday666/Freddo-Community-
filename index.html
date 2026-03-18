@@ -24,7 +24,7 @@ function logMessage(msg) {
 }
 
 function sendCommand(command) {
-  fetch('https://https://freddo-community.onrender.com/api/command', {
+  fetch('https://freddo-community.onrender.com/api/command', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ command: command })
