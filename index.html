@@ -1,81 +1,153 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Inloggen</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 50px;
-        }
-        #welcome {
-            display: none;
-        }
-        form {
-            max-width: 300px;
-            margin-bottom: 20px;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 8px;
-            margin: 8px 0;
-            box-sizing: border-box;
-        }
-        button {
-            padding: 8px 16px;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Freddo Community</title>
+<!-- Google Fonts voor een modern lettertype -->
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+<style>
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #121212;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  #login-section, #community-section {
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    background: #1e1e1e;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  input[type="text"], input[type="password"] {
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #333;
+    color: #fff;
+  }
+  button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4A90E2;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #357ABD;
+  }
+  #community-section {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+  #community-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  /* Discord knop styling */
+  .discord-btn {
+    display: flex;
+    align-items: center;
+    background-color: #5865F2;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s;
+  }
+  .discord-btn:hover {
+    background-color: #4752C4;
+  }
+  .discord-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+  }
+  /* Uitloggen knop */
+  #logout-btn {
+    margin-top: 20px;
+    background-color: #e04848;
+  }
+  #logout-btn:hover {
+    background-color: #b03a3a;
+  }
+</style>
 </head>
 <body>
 
-<h2>Inloggen</h2>
-<div id="login-form">
-    <form id="form">
-        <label for="username">Gebruikersnaam:</label><br>
-        <input type="text" id="username" required><br>
-        <label for="password">Wachtwoord:</label><br>
-        <input type="password" id="password" required><br>
-        <button type="submit">Inloggen</button>
-    </form>
+<!-- Inlogformulier -->
+<div id="login-section">
+  <h2>Inloggen bij Freddo Community</h2>
+  <form id="login-form">
+    <input type="text" id="username" placeholder="Gebruikersnaam" required />
+    <input type="password" id="password" placeholder="Wachtwoord" required />
+    <button type="submit">Inloggen</button>
+  </form>
 </div>
 
-<div id="welcome">
-    <h2>Welkom, <span id="user"></span>!</h2>
-    <button id="logout">Uitloggen</button>
+<!-- Community pagina, zichtbaar na inloggen -->
+<div id="community-section">
+  <h2 id="community-title">Freddo Community</h2>
+  <a class="discord-btn" href="https://discord.gg/DVaVupy5CK" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Discord_logo.svg" class="discord-logo" alt="Discord" />
+    Join onze Discord
+  </a>
+  <button id="logout-btn">Uitloggen</button>
 </div>
 
 <script>
-    // Check of gebruiker al ingelogd is
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-        document.getElementById('login-form').style.display = 'none';
-        document.getElementById('welcome').style.display = 'block';
-        document.getElementById('user').textContent = storedUser;
+  // Check of gebruiker al ingelogd is
+  const storedUser = localStorage.getItem('user');
+  const loginSection = document.getElementById('login-section');
+  const communitySection = document.getElementById('community-section');
+
+  if (storedUser) {
+    loginSection.style.display = 'none';
+    communitySection.style.display = 'flex';
+  }
+
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // In dit voorbeeld: hardcoded login
+    if (username === 'user' && password === 'community123') {
+      localStorage.setItem('user', username);
+      loginSection.style.display = 'none';
+      communitySection.style.display = 'flex';
+    } else {
+      alert('Onjuiste gebruikersnaam of wachtwoord');
     }
+  });
 
-    document.getElementById('form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-
-        // Voor demo: controleer op vaste gebruikersnaam/wachtwoord
-        if (username === 'test' && password === 'test123') {
-            localStorage.setItem('user', username);
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('welcome').style.display = 'block';
-            document.getElementById('user').textContent = username;
-        } else {
-            alert('Onjuiste gebruikersnaam of wachtwoord');
-        }
-    });
-
-    document.getElementById('logout').addEventListener('click', function() {
-        localStorage.removeItem('user');
-        document.getElementById('login-form').style.display = 'block';
-        document.getElementById('welcome').style.display = 'none';
-        document.getElementById('form').reset();
-    });
+  document.getElementById('logout-btn').addEventListener('click', function() {
+    localStorage.removeItem('user');
+    loginSection.style.display = 'block';
+    communitySection.style.display = 'none';
+  });
 </script>
 
 </body>
