@@ -1,230 +1,146 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Game Hosting Volledig</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #eef2f3;
-    margin: 0;
-    padding: 20px;
-  }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddo Community Discord</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
 
-  h1 {
-    text-align: center;
-    color: #333;
-  }
+        header {
+            background-color: #282828;
+            padding: 20px;
+            text-align: center;
+        }
 
-  /* Form styling */
-  #uploadForm {
-    max-width: 600px;
-    margin: 20px auto;
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #ff6347; /* felrood/oranje voor accent */
+        }
 
-  #uploadForm input[type="text"],
-  #uploadForm input[type="file"] {
-    width: 100%;
-    padding: 8px;
-    margin-top: 8px;
-    margin-bottom: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
+        section {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
 
-  #uploadForm button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+        h2 {
+            color: #ff6347;
+            border-bottom: 2px solid #ff6347;
+            padding-bottom: 10px;
+        }
 
-  #uploadForm button:hover {
-    background-color: #45a049;
-  }
+        ul {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
 
-  /* Games list styling */
-#gamesContainer {
-  max-width: 800px;
-  margin: 30px auto;
-}
+        li {
+            margin-bottom: 10px;
+        }
 
-.game {
-  background: #fff;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
-}
+        .cta {
+            text-align: center;
+            margin: 30px 0;
+        }
 
-.game-info {
-  display: flex;
-  flex-direction: column;
-}
+        a.button {
+            background-color: #ff6347;
+            color: #fff;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 1.2em;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
 
-.game-name {
-  font-weight: bold;
-  font-size: 1.2em;
-}
+        a.button:hover {
+            background-color: #e5533d;
+        }
 
-.game-actions button {
-  margin-left: 10px;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn-play {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.btn-delete {
-  background-color: #f44336;
-  color: white;
-}
-
-/* Responsive adjustments */
-@media(max-width: 600px) {
-  .game {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .game-actions {
-    margin-top: 10px;
-  }
-}
-</style>
+        footer {
+            background-color: #282828;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+    </style>
 </head>
 <body>
 
-<h1>Game Hosting Platform</h1>
+<header>
+    <h1>Freddo Community Discord</h1>
+</header>
 
-<!-- Upload formulier -->
-<form id="uploadForm">
-  <h2>Upload je game</h2>
-  <label for="gameName">Naam van de game:</label>
-  <input type="text" id="gameName" name="gameName" required />
+<section>
+    <h2>Wat is de Freddo Community?</h2>
+    <p>De Freddo Community Discord is een gezellige en actieve plek waar je kunt praten over games, memes delen, samenwerken, en nieuwe vrienden maken. Of je nu een hardcore gamer bent of gewoon op zoek bent naar een leuke community, hier ben je aan het juiste adres!</p>
+</section>
 
-  <label for="gameFile">Selecteer game bestand (bijv. ZIP):</label>
-  <input type="file" id="gameFile" name="gameFile" accept=".zip" required />
+<section>
+    <h2>Waarom joinen?</h2>
+    <ul>
+        <li>Communicatie: Praat met andere leden via spraak en tekstkanalen.</li>
+        <li>Updates: Blijf op de hoogte van de nieuwste evenementen en aankondigingen.</li>
+        <li>Events: Doe mee aan toernooien en game nights.</li>
+        <li>Vriendschap: Maak nieuwe vrienden en deel je passie.</li>
+        <li>Support: Stel vragen en krijg hulp van de community.</li>
+    </ul>
+</section>
 
-  <button type="submit">Upload Game</button>
-</form>
+<section>
+    <h2>Regels</h2>
+    <ol>
+        <li>Respecteer alle leden.</li>
+        <li>Geen discriminatie of haatdragende taal.</li>
+        <li>Geen spam of reclame zonder toestemming.</li>
+        <li>Gebruik de juiste kanalen voor het juiste onderwerp.</li>
+        <li>Geen NSFW of ongepaste content.</li>
+        <li>Behandel anderen zoals je zelf behandeld wilt worden.</li>
+        <li>Geen piraterij of illegale activiteiten.</li>
+        <li>Houd de chat vriendelijk en constructief.</li>
+        <li>Volg de richtlijnen van Discord.</li>
+        <li>Respecteer de privacy van anderen.</li>
+        <li>Geen persoonlijke aanvallen.</li>
+        <li>Gebruik geen bots of scripts voor spam.</li>
+        <li>Geen flame wars of provocaties.</li>
+        <li>Wees geduldig en begripvol.</li>
+        <li>Meld problemen aan de moderators.</li>
+        <li>Gebruik geen beledigende gebruikersnamen.</li>
+        <li>Geen spoilers zonder waarschuwing.</li>
+        <li>Houd je aan de thema’s van de kanalen.</li>
+        <li>Geen nepaccounts of trollen.</li>
+        <li>Respecteer de beslissingen van de moderators.</li>
+        <li>Gebruik geen ongepaste profielfoto’s.</li>
+        <li>Wees behulpzaam en positief.</li>
+        <li>Geen illegal content delen.</li>
+        <li>Houd het gesprek relevant.</li>
+        <li>Geen politieke of religieuze discussies.</li>
+        <li>Gebruik de juiste taal in de kanalen.</li>
+        <li>Geen kwetsende opmerkingen.</li>
+        <li>Wees eerlijk en oprecht.</li>
+        <li>Geniet van de community!</li>
+        <li>Veel plezier!</li>
+    </ol>
+</section>
 
-<!-- Lijst van gehoste games -->
-<div id="gamesContainer">
-  <h2>Gepromote games</h2>
-  <div id="gamesList"></div>
-</div>
+<section class="cta">
+    <h2>Hoe join je?</h2>
+    <p>Klik op de onderstaande link en welkom in de community!</p>
+    <a class="button" href="https://discord.gg/DVaVupy5CK" target="_blank">Join de Discord</a>
+</section>
 
-<script>
-  // Gebruik LocalStorage om games op te slaan voor demo
-  let games = JSON.parse(localStorage.getItem('games')) || [];
-
-  const gamesListDiv = document.getElementById('gamesList');
-
-  // Functie om games te tonen
-  function refreshGames() {
-    gamesListDiv.innerHTML = '';
-    if (games.length === 0) {
-      gamesListDiv.innerHTML = '<p>Geen games gehost. Upload er een!</p>';
-      return;
-    }
-    games.forEach((game, index) => {
-      const gameDiv = document.createElement('div');
-      gameDiv.className = 'game';
-
-      const infoDiv = document.createElement('div');
-      infoDiv.className = 'game-info';
-
-      const nameDiv = document.createElement('div');
-      nameDiv.className = 'game-name';
-      nameDiv.textContent = game.name;
-
-      infoDiv.appendChild(nameDiv);
-
-      // Knoppen: Play en Delete
-      const actionsDiv = document.createElement('div');
-      actionsDiv.className = 'game-actions';
-
-      const playBtn = document.createElement('button');
-      playBtn.className = 'btn-play';
-      playBtn.textContent = 'Starten';
-      playBtn.onclick = () => {
-        alert('Start game: ' + game.name);
-        // Hier zou je game kunnen starten
-      };
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'btn-delete';
-      deleteBtn.textContent = 'Verwijderen';
-      deleteBtn.onclick = () => {
-        games.splice(index,1);
-        localStorage.setItem('games', JSON.stringify(games));
-        refreshGames();
-      };
-
-      actionsDiv.appendChild(playBtn);
-      actionsDiv.appendChild(deleteBtn);
-
-      gameDiv.appendChild(infoDiv);
-      gameDiv.appendChild(actionsDiv);
-
-      gamesListDiv.appendChild(gameDiv);
-    });
-  }
-
-  // Init
-  refreshGames();
-
-  // Afhandeling upload formulier
-  document.getElementById('uploadForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const nameInput = document.getElementById('gameName');
-    const fileInput = document.getElementById('gameFile');
-
-    const gameName = nameInput.value.trim();
-
-    if (!fileInput.files || fileInput.files.length === 0) {
-      alert('Selecteer een gamebestand.');
-      return;
-    }
-
-    const file = fileInput.files[0];
-
-    // Voor demo: sla game info op
-    const reader = new FileReader();
-    reader.onload = () => {
-      // In echte wereld zou je bestand uploaden naar server
-      // Hier slaan we alleen de naam en base64 data op in localStorage
-      const gameData = {
-        name: gameName,
-        fileName: file.name,
-        fileData: reader.result, // base64 string
-      };
-      games.push(gameData);
-      localStorage.setItem('games', JSON.stringify(games));
-      alert('Game "' + gameName + '" geüpload!');
-      nameInput.value = '';
-      fileInput.value = '';
-      refreshGames();
-    };
-    reader.readAsDataURL(file);
-  });
-</script>
+<footer>
+    <p>Voor vragen of hulp, neem contact op met de moderators.</p>
+</footer>
 
 </body>
 </html>
