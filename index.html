@@ -1,230 +1,153 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Game Hosting Volledig</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #eef2f3;
-    margin: 0;
-    padding: 20px;
-  }
-
-  h1 {
-    text-align: center;
-    color: #333;
-  }
-
-  /* Form styling */
-  #uploadForm {
-    max-width: 600px;
-    margin: 20px auto;
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-
-  #uploadForm input[type="text"],
-  #uploadForm input[type="file"] {
-    width: 100%;
-    padding: 8px;
-    margin-top: 8px;
-    margin-bottom: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-
-  #uploadForm button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  #uploadForm button:hover {
-    background-color: #45a049;
-  }
-
-  /* Games list styling */
-#gamesContainer {
-  max-width: 800px;
-  margin: 30px auto;
-}
-
-.game {
-  background: #fff;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
-}
-
-.game-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.game-name {
-  font-weight: bold;
-  font-size: 1.2em;
-}
-
-.game-actions button {
-  margin-left: 10px;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn-play {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.btn-delete {
-  background-color: #f44336;
-  color: white;
-}
-
-/* Responsive adjustments */
-@media(max-width: 600px) {
-  .game {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .game-actions {
-    margin-top: 10px;
-  }
-}
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Freddo Community</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+        nav {
+            background-color: #444;
+            display: flex;
+            justify-content: center;
+        }
+        nav a {
+            color: #fff;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        /* Extra styling voor formulieren en secties */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"], input[type="password"], textarea {
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
 <body>
 
-<h1>Game Hosting Platform</h1>
+<header>
+    <h1>Freddo Community</h1>
+    <p>Welkom bij onze community!</p>
+</header>
 
-<!-- Upload formulier -->
-<form id="uploadForm">
-  <h2>Upload je game</h2>
-  <label for="gameName">Naam van de game:</label>
-  <input type="text" id="gameName" name="gameName" required />
+<nav>
+    <a href="#home">Home</a>
+    <a href="#nieuws">Nieuws</a>
+    <a href="#forum">Forum</a>
+    <a href="#leden">Leden</a>
+    <a href="#contact">Contact</a>
+</nav>
 
-  <label for="gameFile">Selecteer game bestand (bijv. ZIP):</label>
-  <input type="file" id="gameFile" name="gameFile" accept=".zip" required />
+<main>
+    <!-- Home Sectie -->
+    <section id="home">
+        <h2>Welkom bij de Freddo Community</h2>
+        <p>De plek voor fans en leden van Freddo. Deel je ideeën, lees het laatste nieuws en ontmoet andere leden!</p>
+    </section>
 
-  <button type="submit">Upload Game</button>
-</form>
+    <!-- Nieuws Sectie -->
+    <section id="nieuws">
+        <h2>Laatste Nieuws</h2>
+        <ul>
+            <li><strong>01-01-2024:</strong> Nieuwe forumfunctie beschikbaar!</li>
+            <li><strong>15-12-2023:</strong> Freddo Community feest binnenkort.</li>
+            <li><strong>01-11-2023:</strong> Lid worden? Registreer je nu!</li>
+        </ul>
+    </section>
 
-<!-- Lijst van gehoste games -->
-<div id="gamesContainer">
-  <h2>Gepromote games</h2>
-  <div id="gamesList"></div>
-</div>
+    <!-- Forum Sectie -->
+    <section id="forum">
+        <h2>Forum</h2>
+        <p>Hier kunnen leden discussiëren over Freddo.</p>
+        <ul>
+            <li><a href="#">Algemene Discussie</a></li>
+            <li><a href="#">Nieuwe Ideeën</a></li>
+            <li><a href="#">Technische Problemen</a></li>
+        </ul>
+    </section>
 
-<script>
-  // Gebruik LocalStorage om games op te slaan voor demo
-  let games = JSON.parse(localStorage.getItem('games')) || [];
+    <!-- Leden Registratie/Login -->
+    <section id="leden">
+        <h2>Leden Login / Registratie</h2>
+        <h3>Login</h3>
+        <form>
+            <input type="text" placeholder="Gebruikersnaam" required />
+            <input type="password" placeholder="Wachtwoord" required />
+            <button type="submit">Inloggen</button>
+        </form>
+        <h3>Registratie</h3>
+        <form>
+            <input type="text" placeholder="Gebruikersnaam" required />
+            <input type="email" placeholder="E-mail" required />
+            <input type="password" placeholder="Wachtwoord" required />
+            <button type="submit">Registreer</button>
+        </form>
+    </section>
 
-  const gamesListDiv = document.getElementById('gamesList');
+    <!-- Contactpagina -->
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>Stuur ons een bericht:</p>
+        <form>
+            <input type="text" placeholder="Naam" required />
+            <input type="email" placeholder="E-mail" required />
+            <textarea rows="4" placeholder="Bericht" required></textarea>
+            <button type="submit">Verzend</button>
+        </form>
+    </section>
+</main>
 
-  // Functie om games te tonen
-  function refreshGames() {
-    gamesListDiv.innerHTML = '';
-    if (games.length === 0) {
-      gamesListDiv.innerHTML = '<p>Geen games gehost. Upload er een!</p>';
-      return;
-    }
-    games.forEach((game, index) => {
-      const gameDiv = document.createElement('div');
-      gameDiv.className = 'game';
-
-      const infoDiv = document.createElement('div');
-      infoDiv.className = 'game-info';
-
-      const nameDiv = document.createElement('div');
-      nameDiv.className = 'game-name';
-      nameDiv.textContent = game.name;
-
-      infoDiv.appendChild(nameDiv);
-
-      // Knoppen: Play en Delete
-      const actionsDiv = document.createElement('div');
-      actionsDiv.className = 'game-actions';
-
-      const playBtn = document.createElement('button');
-      playBtn.className = 'btn-play';
-      playBtn.textContent = 'Starten';
-      playBtn.onclick = () => {
-        alert('Start game: ' + game.name);
-        // Hier zou je game kunnen starten
-      };
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'btn-delete';
-      deleteBtn.textContent = 'Verwijderen';
-      deleteBtn.onclick = () => {
-        games.splice(index,1);
-        localStorage.setItem('games', JSON.stringify(games));
-        refreshGames();
-      };
-
-      actionsDiv.appendChild(playBtn);
-      actionsDiv.appendChild(deleteBtn);
-
-      gameDiv.appendChild(infoDiv);
-      gameDiv.appendChild(actionsDiv);
-
-      gamesListDiv.appendChild(gameDiv);
-    });
-  }
-
-  // Init
-  refreshGames();
-
-  // Afhandeling upload formulier
-  document.getElementById('uploadForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const nameInput = document.getElementById('gameName');
-    const fileInput = document.getElementById('gameFile');
-
-    const gameName = nameInput.value.trim();
-
-    if (!fileInput.files || fileInput.files.length === 0) {
-      alert('Selecteer een gamebestand.');
-      return;
-    }
-
-    const file = fileInput.files[0];
-
-    // Voor demo: sla game info op
-    const reader = new FileReader();
-    reader.onload = () => {
-      // In echte wereld zou je bestand uploaden naar server
-      // Hier slaan we alleen de naam en base64 data op in localStorage
-      const gameData = {
-        name: gameName,
-        fileName: file.name,
-        fileData: reader.result, // base64 string
-      };
-      games.push(gameData);
-      localStorage.setItem('games', JSON.stringify(games));
-      alert('Game "' + gameName + '" geüpload!');
-      nameInput.value = '';
-      fileInput.value = '';
-      refreshGames();
-    };
-    reader.readAsDataURL(file);
-  });
-</script>
+<footer>
+    <p>&copy; 2026 Freddo Community. Alle rechten voorbehouden.</p>
+</footer>
 
 </body>
 </html>
