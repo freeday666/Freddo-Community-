@@ -1,12 +1,230 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mijn GitHub Page</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Game Hosting Volledig</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #eef2f3;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+
+  /* Form styling */
+  #uploadForm {
+    max-width: 600px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  #uploadForm input[type="text"],
+  #uploadForm input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  #uploadForm button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  #uploadForm button:hover {
+    background-color: #45a049;
+  }
+
+  /* Games list styling */
+#gamesContainer {
+  max-width: 800px;
+  margin: 30px auto;
+}
+
+.game {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+.game-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.game-name {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.game-actions button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-play {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media(max-width: 600px) {
+  .game {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .game-actions {
+    margin-top: 10px;
+  }
+}
+</style>
 </head>
 <body>
-    <h1>Welkom op mijn website!</h1>
-    <p>Dit is een eenvoudige website gehost op GitHub Pages.</p>
+
+<h1>Game Hosting Platform</h1>
+
+<!-- Upload formulier -->
+<form id="uploadForm">
+  <h2>Upload je game</h2>
+  <label for="gameName">Naam van de game:</label>
+  <input type="text" id="gameName" name="gameName" required />
+
+  <label for="gameFile">Selecteer game bestand (bijv. ZIP):</label>
+  <input type="file" id="gameFile" name="gameFile" accept=".zip" required />
+
+  <button type="submit">Upload Game</button>
+</form>
+
+<!-- Lijst van gehoste games -->
+<div id="gamesContainer">
+  <h2>Gepromote games</h2>
+  <div id="gamesList"></div>
+</div>
+
+<script>
+  // Gebruik LocalStorage om games op te slaan voor demo
+  let games = JSON.parse(localStorage.getItem('games')) || [];
+
+  const gamesListDiv = document.getElementById('gamesList');
+
+  // Functie om games te tonen
+  function refreshGames() {
+    gamesListDiv.innerHTML = '';
+    if (games.length === 0) {
+      gamesListDiv.innerHTML = '<p>Geen games gehost. Upload er een!</p>';
+      return;
+    }
+    games.forEach((game, index) => {
+      const gameDiv = document.createElement('div');
+      gameDiv.className = 'game';
+
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'game-info';
+
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'game-name';
+      nameDiv.textContent = game.name;
+
+      infoDiv.appendChild(nameDiv);
+
+      // Knoppen: Play en Delete
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'game-actions';
+
+      const playBtn = document.createElement('button');
+      playBtn.className = 'btn-play';
+      playBtn.textContent = 'Starten';
+      playBtn.onclick = () => {
+        alert('Start game: ' + game.name);
+        // Hier zou je game kunnen starten
+      };
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn-delete';
+      deleteBtn.textContent = 'Verwijderen';
+      deleteBtn.onclick = () => {
+        games.splice(index,1);
+        localStorage.setItem('games', JSON.stringify(games));
+        refreshGames();
+      };
+
+      actionsDiv.appendChild(playBtn);
+      actionsDiv.appendChild(deleteBtn);
+
+      gameDiv.appendChild(infoDiv);
+      gameDiv.appendChild(actionsDiv);
+
+      gamesListDiv.appendChild(gameDiv);
+    });
+  }
+
+  // Init
+  refreshGames();
+
+  // Afhandeling upload formulier
+  document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const nameInput = document.getElementById('gameName');
+    const fileInput = document.getElementById('gameFile');
+
+    const gameName = nameInput.value.trim();
+
+    if (!fileInput.files || fileInput.files.length === 0) {
+      alert('Selecteer een gamebestand.');
+      return;
+    }
+
+    const file = fileInput.files[0];
+
+    // Voor demo: sla game info op
+    const reader = new FileReader();
+    reader.onload = () => {
+      // In echte wereld zou je bestand uploaden naar server
+      // Hier slaan we alleen de naam en base64 data op in localStorage
+      const gameData = {
+        name: gameName,
+        fileName: file.name,
+        fileData: reader.result, // base64 string
+      };
+      games.push(gameData);
+      localStorage.setItem('games', JSON.stringify(games));
+      alert('Game "' + gameName + '" geüpload!');
+      nameInput.value = '';
+      fileInput.value = '';
+      refreshGames();
+    };
+    reader.readAsDataURL(file);
+  });
+</script>
+
 </body>
 </html>
