@@ -1,111 +1,230 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mijn Project Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #7289da;
-            --secondary: #2ecc71;
-            --dark: #23272a;
-            --card: #2c2f33;
-            --text: #ffffff;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Game Hosting Volledig</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #eef2f3;
+    margin: 0;
+    padding: 20px;
+  }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--dark);
-            color: var(--text);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+  h1 {
+    text-align: center;
+    color: #333;
+  }
 
-        .container {
-            width: 90%;
-            max-width: 800px;
-            text-align: center;
-        }
+  /* Form styling */
+  #uploadForm {
+    max-width: 600px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
 
-        h1 { margin-bottom: 30px; }
+  #uploadForm input[type="text"],
+  #uploadForm input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
+  #uploadForm button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 
-        .card {
-            background: var(--card);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
-        }
+  #uploadForm button:hover {
+    background-color: #45a049;
+  }
 
-        .card:hover { transform: translateY(-5px); }
+  /* Games list styling */
+#gamesContainer {
+  max-width: 800px;
+  margin: 30px auto;
+}
 
-        .btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            color: white;
-            transition: opacity 0.3s;
-        }
+.game {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
 
-        .btn-discord { background-color: var(--primary); }
-        .btn-fivem { background-color: #ff4757; }
-        .btn-node { background-color: var(--secondary); }
+.game-info {
+  display: flex;
+  flex-direction: column;
+}
 
-        .status {
-            font-size: 0.8rem;
-            color: #aaa;
-            margin-top: 10px;
-        }
-    </style>
+.game-name {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.game-actions button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-play {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media(max-width: 600px) {
+  .game {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .game-actions {
+    margin-top: 10px;
+  }
+}
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>🚀 Project Beheer</h1>
-        
-        <div class="grid">
-            <!-- Discord Bot Card -->
-            <div class="card">
-                <i class="fab fa-discord fa-3x" style="color: var(--primary);"></i>
-                <h3>Discord Bot (Node.js)</h3>
-                <p>Beheer je bot via het paneel.</p>
-                <a href="https://panel.bot-hosting.net" target="_blank" class="btn btn-node">Open Node Paneel</a>
-                <div class="status">Status: <span style="color:var(--secondary)">Online</span></div>
-            </div>
+<h1>Game Hosting Platform</h1>
 
-            <!-- FiveM Server Card -->
-            <div class="card">
-                <i class="fas fa-car fa-3x" style="color: #ff4757;"></i>
-                <h3>FiveM Server</h3>
-                <p>Connect direct naar de server.</p>
-                <a href="fivem://connect/JOUW_IP_HIER" class="btn btn-fivem">Start FiveM</a>
-                <div class="status">IP: play.jouwserver.nl</div>
-            </div>
+<!-- Upload formulier -->
+<form id="uploadForm">
+  <h2>Upload je game</h2>
+  <label for="gameName">Naam van de game:</label>
+  <input type="text" id="gameName" name="gameName" required />
 
-            <!-- GitHub Code Card -->
-            <div class="card">
-                <i class="fab fa-github fa-3x"></i>
-                <h3>Code & Hosting</h3>
-                <p>Bekijk je HTML bestanden.</p>
-                <a href="https://github.com/" target="_blank" class="btn btn-discord" style="background: #444;">Naar GitHub</a>
-                <div class="status">Gehost via GitHub Pages</div>
-            </div>
-        </div>
-    </div>
+  <label for="gameFile">Selecteer game bestand (bijv. ZIP):</label>
+  <input type="file" id="gameFile" name="gameFile" accept=".zip" required />
+
+  <button type="submit">Upload Game</button>
+</form>
+
+<!-- Lijst van gehoste games -->
+<div id="gamesContainer">
+  <h2>Gepromote games</h2>
+  <div id="gamesList"></div>
+</div>
+
+<script>
+  // Gebruik LocalStorage om games op te slaan voor demo
+  let games = JSON.parse(localStorage.getItem('games')) || [];
+
+  const gamesListDiv = document.getElementById('gamesList');
+
+  // Functie om games te tonen
+  function refreshGames() {
+    gamesListDiv.innerHTML = '';
+    if (games.length === 0) {
+      gamesListDiv.innerHTML = '<p>Geen games gehost. Upload er een!</p>';
+      return;
+    }
+    games.forEach((game, index) => {
+      const gameDiv = document.createElement('div');
+      gameDiv.className = 'game';
+
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'game-info';
+
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'game-name';
+      nameDiv.textContent = game.name;
+
+      infoDiv.appendChild(nameDiv);
+
+      // Knoppen: Play en Delete
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'game-actions';
+
+      const playBtn = document.createElement('button');
+      playBtn.className = 'btn-play';
+      playBtn.textContent = 'Starten';
+      playBtn.onclick = () => {
+        alert('Start game: ' + game.name);
+        // Hier zou je game kunnen starten
+      };
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn-delete';
+      deleteBtn.textContent = 'Verwijderen';
+      deleteBtn.onclick = () => {
+        games.splice(index,1);
+        localStorage.setItem('games', JSON.stringify(games));
+        refreshGames();
+      };
+
+      actionsDiv.appendChild(playBtn);
+      actionsDiv.appendChild(deleteBtn);
+
+      gameDiv.appendChild(infoDiv);
+      gameDiv.appendChild(actionsDiv);
+
+      gamesListDiv.appendChild(gameDiv);
+    });
+  }
+
+  // Init
+  refreshGames();
+
+  // Afhandeling upload formulier
+  document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const nameInput = document.getElementById('gameName');
+    const fileInput = document.getElementById('gameFile');
+
+    const gameName = nameInput.value.trim();
+
+    if (!fileInput.files || fileInput.files.length === 0) {
+      alert('Selecteer een gamebestand.');
+      return;
+    }
+
+    const file = fileInput.files[0];
+
+    // Voor demo: sla game info op
+    const reader = new FileReader();
+    reader.onload = () => {
+      // In echte wereld zou je bestand uploaden naar server
+      // Hier slaan we alleen de naam en base64 data op in localStorage
+      const gameData = {
+        name: gameName,
+        fileName: file.name,
+        fileData: reader.result, // base64 string
+      };
+      games.push(gameData);
+      localStorage.setItem('games', JSON.stringify(games));
+      alert('Game "' + gameName + '" geüpload!');
+      nameInput.value = '';
+      fileInput.value = '';
+      refreshGames();
+    };
+    reader.readAsDataURL(file);
+  });
+</script>
 
 </body>
 </html>
