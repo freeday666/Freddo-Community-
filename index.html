@@ -1,12 +1,69 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8" />
-    <title>Mijn Server Pagina</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gratis Game Hosting</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  h1 { text-align: center; }
+  form { margin-bottom: 20px; }
+  input[type="file"] { margin-right: 10px; }
+  .games { display: flex; flex-wrap: wrap; gap: 10px; }
+  .game { border: 1px solid #ccc; padding: 10px; width: 200px; }
+</style>
 </head>
 <body>
-    <h1>Welkom op mijn server!</h1>
-    <p>Deze pagina wordt geserveerd door Node.js</p>
+<h1>Welkom bij Gratis Game Hosting</h1>
+
+<form id="uploadForm">
+  <input type="file" id="gameFile" name="gamefile" accept=".zip,.html,.exe" required />
+  <button type="submit">Upload game</button>
+</form>
+
+<h2>Beschikbare games</h2>
+<div class="games" id="gamesList"></div>
+
+<script>
+const form = document.getElementById('uploadForm');
+const gamesList = document.getElementById('gamesList');
+
+function fetchGames() {
+    fetch('/games')
+        .then(res => res.json())
+        .then(files => {
+            gamesList.innerHTML = '';
+            files.forEach(file => {
+                const url = `/games/${file}`;
+                const div = document.createElement('div');
+                div.className = 'game';
+                div.innerHTML = `
+                    <p>${file}</p>
+                    <a href="${url}" target="_blank">Start game</a>
+                `;
+                gamesList.appendChild(div);
+            });
+        });
+}
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    const fileField = document.getElementById('gameFile');
+    formData.append('gamefile', fileField.files[0]);
+
+    fetch('/upload', {
+        method: 'POST',
+        body: formData
+    }).then(res => res.json())
+      .then(data => {
+          alert(data.message);
+          fetchGames();
+      });
+});
+
+// Initial fetch
+fetchGames();
+</script>
 </body>
 </html>
