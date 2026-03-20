@@ -1,33 +1,51 @@
-// server.js
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
+const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
-const hostname = '0.0.0.0'; // Luistert op alle IP's
+const app = express();
 const port = 8080;
 
-const server = http.createServer((req, res) => {
-    console.log('Request voor:', req.url);
-    if (req.url === '/' || req.url === '/index.html') {
-        // Lees de HTML-bestand en stuur het terug
-        const filePath = path.join(__dirname, 'index.html');
-        fs.readFile(filePath, (err, data) => {
-            if (err) {
-                res.statusCode = 500;
-                res.end('Fout bij het laden van de pagina.');
-            } else {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'text/html');
-                res.end(data);
-            }
-        });
-    } else {
-        // Voor andere URL's, geef 404
-        res.statusCode = 404;
-        res.end('Pagina niet gevonden.');
+// Map voor uploads
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
+// Storage configuratie voor Multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        const uniqueName = Date.now() + '-' + file.originalname;
+        cb(null, uniqueName);
     }
 });
 
-server.listen(port, hostname, () => {
-    console.log(`Server draait op http://${hostname}:${port}/`);
+const upload = multer({ storage });
+
+// Serve static bestanden
+app.use('/games', express.static(uploadDir));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// API endpoint om game te uploaden
+app.post('/upload', upload.single('gamefile'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('Geen bestand geüpload');
+    }
+    res.json({ message: 'Game geüpload', filename: req.file.filename });
+});
+
+// API endpoint om lijst van games op te halen
+app.get('/games', (req, res) => {
+    fs.readdir(uploadDir, (err, files) => {
+        if (err) return res.status(500).send('Fout bij lezen directory');
+        res.json(files);
+    });
+});
+
+app.listen(port, () => {
+    console.log(`Server draait op http://localhost:${port}`);
 });
